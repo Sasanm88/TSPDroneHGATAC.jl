@@ -855,48 +855,59 @@ end
 function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64},
     ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64,
     penaltyM::Float64, problem_type::String, turn::Int64)
+
     bestF = 0
+    bestR = 0
+    substituesF = Vector{Chromosome}()
+    substituesR = Vector{Chromosome}()
+    fsF = Vector{Float64}()
+    fsR = Vector{Float64}()
     @inbounds for i = 1:length(P)
         if P[i].feasible == 'F'
             bestF = i
             break
         end
     end
-    bestR = 0
-    @inbounds for i = 1:length(P)
-        if P[i].feasible == 'R'
-            bestR = i
-            break
-        end
-    end
     chrmF = deepcopy(P[bestF])
-    chrmR = deepcopy(P[bestR])
+    push!(fsF, chrmF.fitness)
+    push!(substituesF, chrmF)
+    best_fF = chrmF.fitness
+    best_fR = 0.0
+
+    if flying_range < Inf
+        @inbounds for i = 1:length(P)
+            if P[i].feasible == 'R'
+                bestR = i
+                break
+            end
+        end
+        
+        chrmR = deepcopy(P[bestR])
+        
+    
+        push!(substituesR, chrmR)
+        push!(fsR, chrmR.fitness)
+        
+        best_fR = chrmR.fitness
+    end
 
     max_size = 20
     allowed_diff = 0.05
 
     methods = [NLO1, NLO2, NLO3, NLO4, NLO5, NLO6, NLO7, NLO8, NLO9, NLO10, NLO11, NLO12, NLO13, NLO14, NLO15, NLO16, NLO17, NLO18, NLO19, NLO20, NLO21, NLO22, NLO23, NLO24]
-    substituesF = Vector{Chromosome}()
-    substituesR = Vector{Chromosome}()
-    fsF = Vector{Float64}()
-    fsR = Vector{Float64}()
+    
 
-    push!(substituesF, chrmF)
-    push!(fsF, chrmF.fitness)
-    push!(substituesR, chrmR)
-    push!(fsR, chrmR.fitness)
-    best_fF = chrmF.fitness
-    best_fR = chrmR.fitness
+    
 
-    @inbounds for i = 1:min(30000 * turn, 100000)
+    @inbounds for i = 1:30000 * turn
         chrmF = substituesF[rand(1:length(substituesF))]
         r = 0
         r = rand(1:length(methods))
         # c = @code_warntype NLO24(chrmF, ClosenessT, ClosenessD)
         c = methods[r](chrmF, ClosenessT, ClosenessD)
-        violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL)
+        violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if length(violating_drones) == 0
-            f, llc = find_fitness_F(c, TT, DD, flying_range, sR, sL)
+            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
             if f < best_fF
                 if length(substituesF) < max_size
                     push!(substituesF, Chromosome(c, llc, f, 'F', 0.0))
@@ -925,7 +936,7 @@ function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matr
                 end
             end
         else
-            f, llc = find_fitness_infR(c, TT, DD, flying_range, sR, sL, penaltyR)
+            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
             if f < best_fR
                 if length(substituesR) < max_size
                     push!(substituesR, Chromosome(c, llc, f, 'R', 0.0))
@@ -955,58 +966,61 @@ function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matr
             end
         end
     end
-    @inbounds for i = 1:min(10000 * turn, 30000)
-        chrmR = substituesR[rand(1:length(substituesR))]
-        r = 0
-        r = rand(1:length(methods))
-        c = methods[r](chrmR, ClosenessT, ClosenessD)
-        violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL)
-        if length(violating_drones) == 0
-            f, llc = find_fitness_F(c, TT, DD, flying_range, sR, sL)
-            if f < best_fF
-                if length(substituesF) < max_size
-                    push!(substituesF, Chromosome(c, llc, f, 'F', 0.0))
-                    push!(fsF, f)
-                else
-                    sort!(substituesF, by=x -> x.fitness)
-                    substituesF[max_size] = Chromosome(c, llc, f, 'F', 0.0)
-                    sort!(fsF)
-                    fsF[max_size] = f
+    if flying_range<Inf
+        @inbounds for i = 1:10000 * turn
+            chrmR = substituesR[rand(1:length(substituesR))]
+            r = 0
+            r = rand(1:length(methods))
+            c = methods[r](chrmR, ClosenessT, ClosenessD)
+            violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
+            if length(violating_drones) == 0
+                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                if f < best_fF
+                    if length(substituesF) < max_size
+                        push!(substituesF, Chromosome(c, llc, f, 'F', 0.0))
+                        push!(fsF, f)
+                    else
+                        sort!(substituesF, by=x -> x.fitness)
+                        substituesF[max_size] = Chromosome(c, llc, f, 'F', 0.0)
+                        sort!(fsF)
+                        fsF[max_size] = f
+                    end
+                    best_fF = f
                 end
-                best_fF = f
-            end
-        else
-            f, llc = find_fitness_infR(c, TT, DD, flying_range, sR, sL, penaltyR)
-            if f < best_fR
+            else
+                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+                if f < best_fR
 
-                if length(substituesR) < max_size
-                    push!(substituesR, Chromosome(c, llc, f, 'R', 0.0))
-                    push!(fsR, f)
-                else
-                    sort!(substituesR, by=x -> x.fitness)
-                    substituesR[max_size] = Chromosome(c, llc, f, 'R', 0.0)
-                    sort!(fsR)
-                    fsR[max_size] = f
-                end
-                best_fR = f
-            elseif f > best_fR
-                temp = Chromosome(c, llc, f, 'R', 0.0)
-                if !(f in fsR)
-                    if (f - best_fR) / best_fR < allowed_diff
-                        if length(substituesR) < max_size
-                            push!(substituesR, temp)
-                            push!(fsR, f)
-                        else
-                            sort!(substituesR, by=x -> x.fitness)
-                            substituesR[max_size] = temp
-                            sort!(fsR)
-                            fsR[max_size] = f
+                    if length(substituesR) < max_size
+                        push!(substituesR, Chromosome(c, llc, f, 'R', 0.0))
+                        push!(fsR, f)
+                    else
+                        sort!(substituesR, by=x -> x.fitness)
+                        substituesR[max_size] = Chromosome(c, llc, f, 'R', 0.0)
+                        sort!(fsR)
+                        fsR[max_size] = f
+                    end
+                    best_fR = f
+                elseif f > best_fR
+                    temp = Chromosome(c, llc, f, 'R', 0.0)
+                    if !(f in fsR)
+                        if (f - best_fR) / best_fR < allowed_diff
+                            if length(substituesR) < max_size
+                                push!(substituesR, temp)
+                                push!(fsR, f)
+                            else
+                                sort!(substituesR, by=x -> x.fitness)
+                                substituesR[max_size] = temp
+                                sort!(fsR)
+                                fsR[max_size] = f
+                            end
                         end
                     end
                 end
             end
         end
     end
+
     sort!(substituesF, by=x -> x.fitness)
     @inbounds for i = 1:length(substituesF)
         chrm = substituesF[i]
@@ -1016,13 +1030,15 @@ function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matr
             break
         end
     end
-    sort!(substituesR, by=x -> x.fitness)
-    @inbounds for i = 1:length(substituesR)
-        chrm = substituesR[i]
-        if chrm.fitness < P[bestR].fitness
-            push!(P, chrm)
-        else
-            break
+    if flying_range<Inf
+        sort!(substituesR, by=x -> x.fitness)
+        @inbounds for i = 1:length(substituesR)
+            chrm = substituesR[i]
+            if chrm.fitness < P[bestR].fitness
+                push!(P, chrm)
+            else
+                break
+            end
         end
     end
 end
