@@ -853,8 +853,8 @@ end
 
 
 function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64},
-    ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64,
-    penaltyM::Float64, problem_type::String, turn::Int64)
+    ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64,
+    penaltyM::Float64, problem_type::problem, turn::Int64)
 
     bestF = 0
     bestR = 0
@@ -1030,7 +1030,7 @@ function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matr
             break
         end
     end
-    if flying_range<Inf
+    if flying_range < Inf
         sort!(substituesR, by=x -> x.fitness)
         @inbounds for i = 1:length(substituesR)
             chrm = substituesR[i]
@@ -1043,6 +1043,5 @@ function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matr
     end
 end
 
-#remove one nonfree truck node (randezvous) and make it a drone node between two consecutive truck, change the corresponding drone to turck
 
 

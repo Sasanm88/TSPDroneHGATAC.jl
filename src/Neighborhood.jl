@@ -1,6 +1,6 @@
 using StatsBase
 
-function N1(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)   #choose one free truck node and puts it randomly in truck tour     #OK
+function N1(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)   #choose one free truck node and puts it randomly in truck tour     #OK
     c = copy(chrm.genes)
     tnodes_loc = findall(x -> x > 0, c)
     free_tnodes = setdiff(tnodes_loc, chrm.LLnodes)
@@ -43,7 +43,7 @@ function N1(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
     return chrm
 end
 
-function N2(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String) #choose two consecutive free truck nodes and puts them randomly in truck tour    #OK
+function N2(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem) #choose two consecutive free truck nodes and puts them randomly in truck tour    #OK
     c = copy(chrm.genes)
     tnodes_loc = findall(x -> x > 0, c)
     free_tnodes = setdiff(tnodes_loc, chrm.LLnodes)
@@ -120,7 +120,7 @@ function N2(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
     return chrm
 end
 
-function N3(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)   #swap two truck nodes 
+function N3(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)   #swap two truck nodes 
     c = copy(chrm.genes)
     tnodes_loc = findall(x -> x > 0, c)
     idx1 = tnodes_loc[rand(1:length(tnodes_loc))]
@@ -156,7 +156,7 @@ function N3(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
     return chrm
 end
 
-function N4(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)   #swap two consecutive free truck nodes with another truck node 
+function N4(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)   #swap two consecutive free truck nodes with another truck node 
     c = copy(chrm.genes)
     tnodes_loc = findall(x -> x > 0, c)
     free_tnodes = setdiff(tnodes_loc, chrm.LLnodes)
@@ -209,7 +209,7 @@ function N4(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
     return chrm
 end
 
-function N5(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)   #swap two consecutive truck nodes with another truck node 
+function N5(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)   #swap two consecutive truck nodes with another truck node 
     c = copy(chrm.genes)
     tnodes_loc = findall(x -> x > 0, c)
     free_tnodes = setdiff(tnodes_loc, chrm.LLnodes)
@@ -262,7 +262,7 @@ function N5(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
     return chrm
 end
 
-function N6(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)        #Truck swap 2-2
+function N6(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)        #Truck swap 2-2
     c = copy(chrm.genes)
     indices = Int[]
     i = 1
@@ -318,7 +318,7 @@ function N6(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
     return chrm
 end
 
-function N7(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)      #Truck swap 2-2
+function N7(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)      #Truck swap 2-2
     c = copy(chrm.genes)
     indices = Int[]
     i = 1
@@ -371,7 +371,7 @@ function N7(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
 end
 
 
-function N8(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)       #Truck swap 2-2
+function N8(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)       #Truck swap 2-2
     c = copy(chrm.genes)
     indices = Int[]
     i = 1
@@ -422,7 +422,7 @@ function N8(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
     return chrm
 end
 
-function N9(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)        #Truck swap 2-2
+function N9(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)        #Truck swap 2-2
     c = copy(chrm.genes)
     indices = Int[]
     i = 1
@@ -479,7 +479,7 @@ function N9(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
 end
 
 
-function N10(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)  #swap a drone node with either one of randezvous nodes or any truck node between
+function N10(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)  #swap a drone node with either one of randezvous nodes or any truck node between
     c = copy(chrm.genes)
     tnodes_loc = findall(x -> x > 0, c)
     dnodes_loc = findall(x -> x < 0, c)
@@ -554,7 +554,7 @@ function N10(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     return chrm
 end
 
-function N11(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)  #in drone route <i,j,k> swap i and j
+function N11(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)  #in drone route <i,j,k> swap i and j
     c = copy(chrm.genes)
     tnodes_loc = findall(x -> x > 0, c)
     dnodes_loc = findall(x -> x < 0, c)
@@ -616,7 +616,7 @@ function N11(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     return chrm
 end
 
-function N12(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)  #in drone route <i,j,k> swap k and j
+function N12(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)  #in drone route <i,j,k> swap k and j
     c = copy(chrm.genes)
     tnodes_loc = findall(x -> x > 0, c)
     dnodes_loc = findall(x -> x < 0, c)
@@ -676,7 +676,7 @@ function N12(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     return chrm
 end
 
-function N13(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)  #in drone route <i,j,k> swap k and i
+function N13(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)  #in drone route <i,j,k> swap k and i
     c = copy(chrm.genes)
     tnodes_loc = findall(x -> x > 0, c)
     dnodes_loc = findall(x -> x < 0, c)
@@ -736,7 +736,7 @@ function N13(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     return chrm
 end
 
-function N14(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)  #remove one free truck node and make it a drone node between two consecutive truck nodes
+function N14(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)  #remove one free truck node and make it a drone node between two consecutive truck nodes
     c = copy(chrm.genes)
     tnodes_loc = findall(x -> x > 0, c)
     free_tnodes = setdiff(tnodes_loc, chrm.LLnodes)
@@ -789,7 +789,7 @@ function N14(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
 end
 
 
-function N14p(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)  #remove one middle truck node and make it a drone node
+function N14p(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)  #remove one middle truck node and make it a drone node
     c = copy(chrm.genes)
     middle_tnodes = Int[]
     one_positive = false
@@ -843,7 +843,7 @@ function N14p(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{
 end
 
 
-function N15(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)  #remove a drone node and insert it randomly as a truck node between two consequtive truck nodes
+function N15(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)  #remove a drone node and insert it randomly as a truck node between two consequtive truck nodes
     c = copy(chrm.genes)
     dnodes_loc = findall(x -> x < 0, c)
     if length(dnodes_loc) == 0
@@ -898,7 +898,7 @@ function N15(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     return chrm
 end
 
-function N19(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)  #remove a drone node and insert it randomly as a drone node between two consequtive truck nodes
+function N19(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)  #remove a drone node and insert it randomly as a drone node between two consequtive truck nodes
     c = copy(chrm.genes)
     dnodes_loc = findall(x -> x < 0, c)
     if length(dnodes_loc) == 0
@@ -953,7 +953,7 @@ function N19(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     return chrm
 end
 
-function N16(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)  #swap two drone nodes
+function N16(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)  #swap two drone nodes
     c = copy(chrm.genes)
     dnodes_loc = findall(x -> x < 0, c)
     if length(dnodes_loc) > 1
@@ -990,7 +990,7 @@ function N16(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     return chrm
 end
 
-function N17(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)   #Swap a truck node with a drone node
+function N17(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)   #Swap a truck node with a drone node
     c = copy(chrm.genes)
     dnodes_loc = findall(x -> x < 0, c)
     if length(dnodes_loc) == 0
@@ -1029,7 +1029,7 @@ function N17(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     return chrm
 end
 
-function N18(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)  #swap two truck arcs
+function N18(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)  #swap two truck arcs
     c = copy(chrm.genes)
     tnodes_loc = findall(x -> x > 0, c)
     idx1 = tnodes_loc[rand(1:length(tnodes_loc))]
@@ -1070,7 +1070,7 @@ function N18(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     return chrm
 end
 
-function N20(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)  #swap two drone nodes and make them truck nodes
+function N20(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)  #swap two drone nodes and make them truck nodes
     c = copy(chrm.genes)
     dnodes_loc = findall(x -> x < 0, c)
     if length(dnodes_loc) > 1
@@ -1108,7 +1108,7 @@ function N20(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     return chrm
 end
 
-function N21(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)  #
+function N21(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)  #
     c = copy(chrm.genes)
     dnodes_loc = findall(x -> x < 0, c)
     if length(dnodes_loc) == 0 || length(chrm.LLnodes) == 0
@@ -1156,7 +1156,7 @@ function N21(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
 end
 
 
-function N22(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)  ##remove a drone node d, find a random drone pair <i,j,k> change the j to truck and put d in <i,j,d,k> or <i,d,j,k>
+function N22(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)  ##remove a drone node d, find a random drone pair <i,j,k> change the j to truck and put d in <i,j,d,k> or <i,d,j,k>
     c = copy(chrm.genes)
     dnodes_loc = findall(x -> x < 0, c)
     if length(dnodes_loc) == 0 || length(chrm.LLnodes) == 0
@@ -1208,8 +1208,8 @@ function N22(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
 end
 
 function Improve_chromosome(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, 
-    dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Int64,
-     sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::String)
+    dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64,
+     sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, problem_type::problem)
 
     Search_methods = [N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, N11, N12, N13, N14, N14p, N15, N16, N17, N18, N19, N20, N21, N22]
     # @show typeof(Search_methods)

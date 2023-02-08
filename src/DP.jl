@@ -15,14 +15,11 @@ end
 
 function find_tnodes(c::Vector{Int64}, n_nodes::Int64)
     tnodes = Vector{Int64}()
-    #     dnodes = []
     num = 0
     @inbounds for i = 1:length(c)
         if c[i] > 0
             push!(tnodes, c[i])
             num += 1
-            #         else
-            #             push!(dnodes,-c[i])
         end
     end
 
@@ -42,7 +39,7 @@ end
 
 
 function find_fitness(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{Float64}, flying_range::Float64,
-     sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, feasibility::Char, problem_type::String)
+     sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, feasibility::Char, problem_type::problem)
     if problem_type == "TSPD"
         if feasibility == 'F'
             return find_fitness_F_TSPD(c, TT, DD, flying_range)

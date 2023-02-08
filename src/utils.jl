@@ -1,4 +1,15 @@
+@enum problem begin
+    TSPD
+    FSTSP
+end
 
+mutable struct Chromosome
+    genes::Vector{Int64}      #Represents the sequence and the types of nodes, positive number means the node is visited by truck, while negative is for drone 
+    LLnodes::Vector{Int64}    #Represents the location of luanch and land nodes so along with genes it gives us the tour
+    fitness::Float64          #This is the Makespan of the given sequence found by JOIN algorithm (smaller, better)
+    feasible::Char            #'F': feasible, 'R':infeasible type range, 'M':infeasible type multiple drone nodes   (In TSPD with unlimited flight range, there would be no 'R')
+    power::Float64            # This is the fitness after considering the diversity contribution (smaller, better)
+end
 
 function Is_feasibleM(c::Vector{Int64})
     prev_negative = false
@@ -69,7 +80,7 @@ mutable struct Dr_node    #Not required for unlimited TSPD
     Ttimes::Matrix{Float64}
 end
 
-function find_beforeANDafter_nodes(c::Vector{Int64}, TT::Matrix{Float64}, problem_type::String)   #Not required for unlimited TSPD
+function find_beforeANDafter_nodes(c::Vector{Int64}, TT::Matrix{Float64}, problem_type::problem)   #Not required for unlimited TSPD
     n_nodes = length(c)
     DrNodes = Vector{Dr_node}()
     dnodes_loc = findall(x -> x < 0, c)
@@ -130,7 +141,7 @@ function find_beforeANDafter_nodes(c::Vector{Int64}, TT::Matrix{Float64}, proble
 end
 
 function Is_feasibleR(c::Vector{Int64}, DD::Matrix{Float64}, TT::Matrix{Float64}, dEligible::Vector{Int64},
-     flying_range::Float64, sR::Int, sL::Int, problem_type::String)   #Not required for unlimited TSPD
+     flying_range::Float64, sR::Int, sL::Int, problem_type::problem)   #Not required for unlimited TSPD
     
     violating_nodes = Vector{Int64}()
     if flying_range == Inf        #For some problems, flying_range is not Inf but technically is. We should manually take care of this
@@ -188,4 +199,53 @@ function make_feasibleR(c::Vector{Int64}, violating_nodes::Vector{Int64})   #Not
         c[i] = -c[i]
     end
     return c
+end
+
+
+
+
+function best_objective(Population::Vector{Chromosome})
+    @inbounds for i in 1:length(Population)
+        if Population[i].feasible == 'F'
+            return Population[i].fitness
+        end
+    end
+    return Inf # Is this correct?
+end
+
+function Print_best_route(Population::Vector{Chromosome})
+    @inbounds for i in 1:length(Population)
+        if Population[i].feasible == 'F'
+            @inbounds for j in Population[i].genes
+                print(j, " ")
+            end
+            break
+        end
+    end
+end
+
+function Return_best_route(Population::Vector{Chromosome})
+    @inbounds for i in 1:length(Population)
+        if Population[i].feasible == 'F'
+            return Population[i].genes, Population[i].LLnodes
+        end
+    end
+end
+
+function Find_Closeness(TT::Matrix{Float64}, DD::Matrix{Float64}, h::Float64)
+    n_nodes = size(TT)[1] - 2
+    num = Int(ceil(h * n_nodes))
+    ClosenessT = zeros(Int, n_nodes, num)
+    ClosenessD = zeros(Int, n_nodes, num)
+    @inbounds for i = 2:n_nodes+1
+        a = copy(TT[i, 2:n_nodes+1])
+        b = sortperm(a)
+        ClosenessT[i-1, :] = b[2:num+1]
+    end
+    @inbounds for i = 2:n_nodes+1
+        a = copy(DD[i, 2:n_nodes+1])
+        b = sortperm(a)
+        ClosenessD[i-1, :] = b[2:num+1]
+    end
+    return ClosenessT, ClosenessD
 end

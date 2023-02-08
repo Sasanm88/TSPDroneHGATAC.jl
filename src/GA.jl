@@ -1,13 +1,4 @@
-using StatsBase
-
-mutable struct Chromosome
-    genes::Vector{Int64}      #Represents the sequence and the types of nodes, positive number means the node is visited by truck, while negative is for drone 
-    LLnodes::Vector{Int64}    #Represents the location of luanch and land nodes so along with genes it gives us the tour
-    fitness::Float64          #This is the Makespan of the given sequence found by JOIN algorithm (smaller, better)
-    feasible::Char            #'F': feasible, 'R':infeasible type range, 'M':infeasible type multiple drone nodes   (In TSPD with unlimited flight range, there would be no 'R')
-    power::Float64            # This is the fitness after considering the diversity contribution (smaller, better)
-end
-
+# using StatsBase
 
 function Creat_Random_Cromosome(n_nodes::Int64)
     chromosome = shuffle!([i for i = 1:n_nodes])
@@ -95,7 +86,7 @@ end
 function process_child(Population::Vector{Chromosome}, child::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{Float64},
     dEligible::Vector{Int64}, flying_range::Float64, penaltyR::Float64, penaltyM::Float64, fractionFeasibleLoad::Float64,
     fractionInFeasibleRLoad::Float64, feas_count::Int64, InfR_count::Int64, InfM_count::Int64, sR::Int64, sL::Int64,
-     ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, problem_type::String)
+     ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, problem_type::problem)
     n_nodes = length(child)
     if Is_feasibleM(child)
         violating_drones = Is_feasibleR(child, DD, TT, dEligible, flying_range, sR, sL, problem_type)
@@ -251,7 +242,7 @@ function Generate_new_generation(TT::Matrix{Float64}, DD::Matrix{Float64}, dElig
     popsize::Tuple{Int64,Int64}, k_tournament::Int64, targetFeasible::Float64, sR::Int, sL::Int, ClosenessT::Matrix{Int64},
     ClosenessD::Matrix{Int64}, initial_chrm::Vector{Int64}, Gen_num::Int64, feas_count::Int64, InfR_count::Int64, InfM_count::Int64,
     penaltyR::Float64, penaltyM::Float64, old_best::Float64, fractionFeasibleLoad::Float64, fractionInFeasibleRLoad::Float64,
-    Population::Vector{Chromosome}, improve_count::Int64, problem_type::String)
+    Population::Vector{Chromosome}, improve_count::Int64, problem_type::problem)
     t1 = time()
 
     mu, sigma = popsize
@@ -261,8 +252,9 @@ function Generate_new_generation(TT::Matrix{Float64}, DD::Matrix{Float64}, dElig
 
 
     if improve_count % 100 == 0
-        Diversify(Population, mu, TT, DD, dEligible, n_nodes, "soft", flying_range, sR, sL, penaltyR, penaltyM, initial_chrm, problem_type)
+        Diversify(Population, mu, TT, DD, dEligible, n_nodes, flying_range, sR, sL, penaltyR, penaltyM, initial_chrm, problem_type)
     end
+
     Sort_based_on_power(Population)
     psize = length(Population)
     parent1, parent2 = Select_parents(Population, k_tournament, psize)
@@ -276,7 +268,8 @@ function Generate_new_generation(TT::Matrix{Float64}, DD::Matrix{Float64}, dElig
 
     sort!(Population, by=x -> x.fitness)
     if improve_count % 999 == 0
-        Scape_local_optima(Population, TT, DD, dEligible, ClosenessT, ClosenessD, flying_range, sR, sL, penaltyR, Int(round(improve_count / 999)))
+        Scape_local_optima(Population, TT, DD, dEligible, ClosenessT, ClosenessD, flying_range, 
+        sR, sL, penaltyR, penaltyM, problem_type, Int(round(improve_count / 999)))
     end
     feas_count, InfR_count, InfM_count = Perform_Survival_plan(Population, mu, sigma, feas_count, InfR_count, InfM_count)
 
@@ -291,37 +284,15 @@ function Generate_new_generation(TT::Matrix{Float64}, DD::Matrix{Float64}, dElig
     Gen_num += 1
 
     if Gen_num % 1000 == 0
-        println("Generation ", Gen_num, " the best objective is: ", old_best, " Feasible fraction = ", round(fractionFeasibleLoad, digits=3), " penaltyR=", round(penaltyR, digits=2), " penaltyM=", round(penaltyM, digits=2))
+        println("Generation ", Gen_num, " the best objective found so far is: ", round(old_best, digits=2))
     end
     return Gen_num, feas_count, InfR_count, InfM_count, penaltyR, penaltyM, old_best, fractionFeasibleLoad, fractionInFeasibleRLoad, Population, improve_count
 end
 
 
 
-function best_objective(Population::Vector{Chromosome})
-    @inbounds for i in 1:length(Population)
-        if Population[i].feasible == 'F'
-            return Population[i].fitness
-        end
-    end
-    return Inf # Is this correct?
-end
-
-function best_route(Population::Vector{Chromosome})
-    @inbounds for i in 1:length(Population)
-        if Population[i].feasible == 'F'
-            @inbounds for j in Population[i].genes
-                print(j, " ")
-            end
-            break
-        end
-    end
-    # TODO: 
-    # return ???
-end
-
 function Perform_Genetic_Algorithm(TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, h::Float64, popsize::Tuple{Int64,Int64},
-    k_tournament::Int64, targetFeasible::Float64, sR::Int64, sL::Int64, num_iter::Int64, flying_range::Float64, initial_chrm::Vector{Int64}, problem_type::String)
+    k_tournament::Int64, targetFeasible::Float64, sR::Int64, sL::Int64, num_iter::Int64, flying_range::Float64, initial_chrm::Vector{Int64}, problem_type::problem)
     n_nodes = size(TT)[1] - 2
     t1 = time()
     ClosenessT, ClosenessD = Find_Closeness(TT, DD, h)
@@ -354,33 +325,37 @@ function Perform_Genetic_Algorithm(TT::Matrix{Float64}, DD::Matrix{Float64}, dEl
     end
     t2 = time()
 
-    println("The best objective achieved in ", Gen_num, " generations is: ", best_objective(Population), " and it took ", t2 - t1, " seconds.")
+    println("The best objective achieved in ", Gen_num, " generations is: ", round(best_objective(Population), digits=2), " and it took ", round(t2 - t1, digits=2), " seconds.")
     println("And the best route is: ")
-    best_route(Population)
+    Print_best_route(Population)
     return Population
 end
 
 
+function run_GA(problem_type::problem, num_runs::Int64, T::Matrix{Float64}, D::Matrix{Float64},
+    flying_range::Float64, sR::Int, sL::Int, drone_not_Eligible::Vector{Int})
 
-function run_GA(depot::Tuple{Float64}, Customers::Matrix{Float64}, tspeed::Int, dspeed::Int, h::Float64, flying_range::Float64, sR::Int, sL::Int,
-     num_runs::Int64, num_generations::Int64, problem_type::String)
      n_nodes = size(T)[1] - 2
-     T, D = Calculate_duration_matrices(tspeed, dspeed, depot, Customers)
+     #GA Parameters
     popsize = (15, 25)  #(mu,sigma)
     k_tournament = 5
     targetFeasible = 0.2
+     h = 0.3
+     num_generations = 2500
 
     objs = Float64[]
     times = Float64[]
 
     best_obj_all_time = Inf
     worst_obj = 0.0
+    best_sequence = Int[]
+    best_LLnodes = Int[]
 
     @inbounds for i in 1:num_runs
         initial_chrm = Build_Initial_chromosome(T, D, n_nodes, flying_range, sR, sL)
         t1 = time()
         println("Run ", i, ":")
-        P = Perform_Genetic_Algorithm(T, D, dEligible, h, popsize, k_tournament, targetFeasible, sR, sL, 
+        P = Perform_Genetic_Algorithm(T, D, drone_not_Eligible, h, popsize, k_tournament, targetFeasible, sR, sL, 
         num_generations, flying_range, initial_chrm, problem_type)
         t2 = time()
         current_best = best_objective(P)
@@ -389,6 +364,7 @@ function run_GA(depot::Tuple{Float64}, Customers::Matrix{Float64}, tspeed::Int, 
         println()
         if current_best < best_obj_all_time
             best_obj_all_time = current_best
+            best_sequence, best_LLnodes = Return_best_route(P)
         end
         if current_best > worst_obj
             worst_obj = current_best
@@ -397,7 +373,7 @@ function run_GA(depot::Tuple{Float64}, Customers::Matrix{Float64}, tspeed::Int, 
 
     println()
 
-    println("Genetic Algorithm results for solving instance ", string(sample_name), " for ", num_runs, " times:")
+    println("Genetic Algorithm results for solving this instance for ", num_runs, " times:")
     println()
     println("The average objective found for this instance in ", num_runs, " runs is: ", round(sum(objs) / num_runs, digits=2),
         " ,the best found was: ", round(best_obj_all_time, digits=2), " and the worst found was: ", round(worst_obj, digits=2))
@@ -406,20 +382,6 @@ function run_GA(depot::Tuple{Float64}, Customers::Matrix{Float64}, tspeed::Int, 
 end
 
 
-function Find_Closeness(TT::Matrix{Float64}, DD::Matrix{Float64}, h::Float64)
-    n_nodes = size(TT)[1] - 2
-    num = Int(ceil(h * n_nodes))
-    ClosenessT = zeros(Int, n_nodes, num)
-    ClosenessD = zeros(Int, n_nodes, num)
-    @inbounds for i = 2:n_nodes+1
-        a = copy(TT[i, 2:n_nodes+1])
-        b = sortperm(a)
-        ClosenessT[i-1, :] = b[2:num+1]
-    end
-    @inbounds for i = 2:n_nodes+1
-        a = copy(DD[i, 2:n_nodes+1])
-        b = sortperm(a)
-        ClosenessD[i-1, :] = b[2:num+1]
-    end
-    return ClosenessT, ClosenessD
-end
+
+
+
