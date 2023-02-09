@@ -24,19 +24,21 @@ function N1(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
         violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if chrm.feasible == 'F'
             if length(violating_drones) == 0
-                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 if f < chrm.fitness
                     chrm.genes = c
                     chrm.fitness = f
                     chrm.LLnodes = llc
+                    chrm.Real_LLnodes = rllc
                 end
             end
         else
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     end
@@ -78,19 +80,21 @@ function N2(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
         violating_drones = Is_feasibleR(c1, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if chrm.feasible == 'F'
             if length(violating_drones) == 0
-                f1, llc1 = find_fitness(c1, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                f1, llc1, rllc1 = find_fitness(c1, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 if f1 < chrm.fitness
                     chrm.genes = c1
                     chrm.fitness = f1
                     chrm.LLnodes = llc1
+                    chrm.Real_LLnodes = rllc1
                 end
             end
         else
-            f1, llc1 = find_fitness(c1, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+            f1, llc1, rllc1 = find_fitness(c1, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
             if f1 < chrm.fitness
                 chrm.genes = c1
                 chrm.fitness = f1
                 chrm.LLnodes = llc1
+                chrm.Real_LLnodes = rllc1
             end
         end
         c2 = copy(c)
@@ -100,19 +104,21 @@ function N2(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
         violating_drones = Is_feasibleR(c2, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if chrm.feasible == 'F'
             if length(violating_drones) == 0
-                f2, llc2 = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                f2, llc2, rllc2 = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 if f2 < chrm.fitness
                     chrm.genes = c2
                     chrm.fitness = f2
                     chrm.LLnodes = llc2
+                    chrm.Real_LLnodes = rllc2
                 end
             end
         else
-            f2, llc2 = find_fitness(c2, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+            f2, llc2, rllc2 = find_fitness(c2, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
             if f2 < chrm.fitness
                 chrm.genes = c2
                 chrm.fitness = f2
                 chrm.LLnodes = llc2
+                chrm.Real_LLnodes = rllc2
             end
         end
 
@@ -138,19 +144,21 @@ function N3(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
     violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
     if chrm.feasible == 'F'
         if length(violating_drones) == 0
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     else
-        f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+        f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
         if f < chrm.fitness
             chrm.genes = c
             chrm.fitness = f
             chrm.LLnodes = llc
+            chrm.Real_LLnodes = rllc
         end
     end
     return chrm
@@ -190,19 +198,21 @@ function N4(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
         violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if chrm.feasible == 'F'
             if length(violating_drones) == 0
-                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 if f < chrm.fitness
                     chrm.genes = c
                     chrm.fitness = f
                     chrm.LLnodes = llc
+                    chrm.Real_LLnodes = rllc
                 end
             end
         else
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     end
@@ -243,19 +253,21 @@ function N5(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
         violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if chrm.feasible == 'F'
             if length(violating_drones) == 0
-                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 if f < chrm.fitness
                     chrm.genes = c
                     chrm.fitness = f
                     chrm.LLnodes = llc
+                    chrm.Real_LLnodes = rllc
                 end
             end
         else
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     end
@@ -299,19 +311,21 @@ function N6(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
         violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if chrm.feasible == 'F'
             if length(violating_drones) == 0
-                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 if f < chrm.fitness
                     chrm.genes = c
                     chrm.fitness = f
                     chrm.LLnodes = llc
+                    chrm.Real_LLnodes = rllc
                 end
             end
         else
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     end
@@ -351,19 +365,21 @@ function N7(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
         violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if chrm.feasible == 'F'
             if length(violating_drones) == 0
-                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 if f < chrm.fitness
                     chrm.genes = c
                     chrm.fitness = f
                     chrm.LLnodes = llc
+                    chrm.Real_LLnodes = rllc
                 end
             end
         else
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     end
@@ -403,19 +419,21 @@ function N8(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
         violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if chrm.feasible == 'F'
             if length(violating_drones) == 0
-                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 if f < chrm.fitness
                     chrm.genes = c
                     chrm.fitness = f
                     chrm.LLnodes = llc
+                    chrm.Real_LLnodes = rllc
                 end
             end
         else
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     end
@@ -458,19 +476,21 @@ function N9(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Fl
         violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if chrm.feasible == 'F'
             if length(violating_drones) == 0
-                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 if f < chrm.fitness
                     chrm.genes = c
                     chrm.fitness = f
                     chrm.LLnodes = llc
+                    chrm.Real_LLnodes = rllc
                 end
             end
         else
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     end
@@ -536,19 +556,21 @@ function N10(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
     if chrm.feasible == 'F'
         if length(violating_drones) == 0
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     else
-        f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+        f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
         if f < chrm.fitness
             chrm.genes = c
             chrm.fitness = f
             chrm.LLnodes = llc
+            chrm.Real_LLnodes = rllc
         end
     end
     return chrm
@@ -598,19 +620,21 @@ function N11(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
     if chrm.feasible == 'F'
         if length(violating_drones) == 0
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     else
-        f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+        f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
         if f < chrm.fitness
             chrm.genes = c
             chrm.fitness = f
             chrm.LLnodes = llc
+            chrm.Real_LLnodes = rllc
         end
     end
     return chrm
@@ -658,19 +682,21 @@ function N12(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
     if chrm.feasible == 'F'
         if length(violating_drones) == 0
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     else
-        f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+        f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
         if f < chrm.fitness
             chrm.genes = c
             chrm.fitness = f
             chrm.LLnodes = llc
+            chrm.Real_LLnodes = rllc
         end
     end
     return chrm
@@ -718,19 +744,21 @@ function N13(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
     if chrm.feasible == 'F'
         if length(violating_drones) == 0
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     else
-        f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+        f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
         if f < chrm.fitness
             chrm.genes = c
             chrm.fitness = f
             chrm.LLnodes = llc
+            chrm.Real_LLnodes = rllc
         end
     end
     return chrm
@@ -768,19 +796,21 @@ function N14(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
             violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
             if chrm.feasible == 'F'
                 if length(violating_drones) == 0
-                    f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                    f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                     if f < chrm.fitness
                         chrm.genes = c
                         chrm.fitness = f
                         chrm.LLnodes = llc
+                        chrm.Real_LLnodes = rllc
                     end
                 end
             else
-                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+                f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
                 if f < chrm.fitness
                     chrm.genes = c
                     chrm.fitness = f
                     chrm.LLnodes = llc
+                    chrm.Real_LLnodes = rllc
                 end
             end
         end
@@ -823,19 +853,21 @@ function N14p(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{
         violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if chrm.feasible == 'F'
             if length(violating_drones) == 0
-                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 if f < chrm.fitness
                     chrm.genes = c
                     chrm.fitness = f
                     chrm.LLnodes = llc
+                    chrm.Real_LLnodes = rllc
                 end
             end
         else
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     end
@@ -879,19 +911,21 @@ function N15(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
         violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if chrm.feasible == 'F'
             if length(violating_drones) == 0
-                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 if f < chrm.fitness
                     chrm.genes = c
                     chrm.fitness = f
                     chrm.LLnodes = llc
+                    chrm.Real_LLnodes = rllc
                 end
             end
         else
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     end
@@ -934,19 +968,21 @@ function N19(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
         violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if chrm.feasible == 'F'
             if length(violating_drones) == 0
-                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 if f < chrm.fitness
                     chrm.genes = c
                     chrm.fitness = f
                     chrm.LLnodes = llc
+                    chrm.Real_LLnodes = rllc
                 end
             end
         else
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     end
@@ -970,19 +1006,21 @@ function N16(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
             if chrm.feasible == 'F'
                 violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
                 if length(violating_drones) == 0
-                    f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                    f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                     if f < chrm.fitness
                         chrm.genes = c
                         chrm.fitness = f
                         chrm.LLnodes = llc
+                        chrm.Real_LLnodes = rllc
                     end
                 end
             else
-                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+                f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
                 if f < chrm.fitness
                     chrm.genes = c
                     chrm.fitness = f
                     chrm.LLnodes = llc
+                    chrm.Real_LLnodes = rllc
                 end
             end
         end
@@ -1011,19 +1049,21 @@ function N17(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     if chrm.feasible == 'F'
         violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if length(violating_drones) == 0
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     else
-        f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+        f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
         if f < chrm.fitness
             chrm.genes = c
             chrm.fitness = f
             chrm.LLnodes = llc
+            chrm.Real_LLnodes = rllc
         end
     end
     return chrm
@@ -1052,19 +1092,21 @@ function N18(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     if chrm.feasible == 'F'
         violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if length(violating_drones) == 0
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     else
-        f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+        f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
         if f < chrm.fitness
             chrm.genes = c
             chrm.fitness = f
             chrm.LLnodes = llc
+            chrm.Real_LLnodes = rllc
         end
     end
     return chrm
@@ -1089,19 +1131,21 @@ function N20(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
         if chrm.feasible == 'F'
             violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
             if length(violating_drones) == 0
-                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 if f < chrm.fitness
                     chrm.genes = c
                     chrm.fitness = f
                     chrm.LLnodes = llc
+                    chrm.Real_LLnodes = rllc
                 end
             end
         else
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     end
@@ -1137,19 +1181,21 @@ function N21(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     if chrm.feasible == 'F'
         violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if length(violating_drones) == 0
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     else
-        f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+        f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
         if f < chrm.fitness
             chrm.genes = c
             chrm.fitness = f
             chrm.LLnodes = llc
+            chrm.Real_LLnodes = rllc
         end
     end
     return chrm
@@ -1189,19 +1235,21 @@ function N22(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{F
     if chrm.feasible == 'F'
         violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if length(violating_drones) == 0
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
             if f < chrm.fitness
                 chrm.genes = c
                 chrm.fitness = f
                 chrm.LLnodes = llc
+                chrm.Real_LLnodes = rllc
             end
         end
     else
-        f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+        f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
         if f < chrm.fitness
             chrm.genes = c
             chrm.fitness = f
             chrm.LLnodes = llc
+            chrm.Real_LLnodes = rllc
         end
     end
     return chrm

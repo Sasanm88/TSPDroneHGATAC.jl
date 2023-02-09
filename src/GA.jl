@@ -97,8 +97,8 @@ function process_child(Population::Vector{Chromosome}, child::Vector{Int64}, TT:
             fractionFeasibleLoad = fractionFeasibleLoad * 0.99
             fractionInFeasibleRLoad = fractionInFeasibleRLoad * 0.99 + 0.01
         end
-        fitness, LLnodes = find_fitness(child, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
-        offspring = Chromosome(child, LLnodes, fitness, 'R', 0.0)
+        fitness, LLnodes, Real_LLnodes = find_fitness(child, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+        offspring = Chromosome(child, LLnodes, Real_LLnodes, fitness, 'R', 0.0)
         offspring = Improve_chromosome(offspring, n_nodes, TT, DD, dEligible, ClosenessT, ClosenessD, flying_range, sR, sL, penaltyR, penaltyM, problem_type)
         violating_drones = Is_feasibleR(offspring.genes, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if length(violating_drones) == 0
@@ -107,8 +107,8 @@ function process_child(Population::Vector{Chromosome}, child::Vector{Int64}, TT:
             feas_count += 1
         elseif rand() < 0.5
             child = make_feasibleR(offspring.genes, violating_drones)
-            fitness, LLnodes = find_fitness(offspring.genes, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
-            offspring = Chromosome(child, LLnodes, fitness, 'F', 0.0)
+            fitness, LLnodes, Real_LLnodes = find_fitness(offspring.genes, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+            offspring = Chromosome(child, LLnodes, Real_LLnodes, fitness, 'F', 0.0)
             push!(Population, offspring)
             feas_count += 1
         else
@@ -119,8 +119,8 @@ function process_child(Population::Vector{Chromosome}, child::Vector{Int64}, TT:
         fractionFeasibleLoad = fractionFeasibleLoad * 0.99
         fractionInFeasibleRLoad = fractionInFeasibleRLoad * 0.99
         child = make_feasibleM(child)
-        fitness, LLnodes = find_fitness(child, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
-        offspring = Chromosome(child, LLnodes, fitness, 'R', 0.0)
+        fitness, LLnodes, Real_LLnodes = find_fitness(child, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+        offspring = Chromosome(child, LLnodes, Real_LLnodes, fitness, 'R', 0.0)
         offspring = Improve_chromosome(offspring, n_nodes, TT, DD, dEligible, ClosenessT, ClosenessD, flying_range, sR, sL, penaltyR, penaltyM, problem_type)
         violating_drones = Is_feasibleR(offspring.genes, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if length(violating_drones) == 0
@@ -129,8 +129,8 @@ function process_child(Population::Vector{Chromosome}, child::Vector{Int64}, TT:
             feas_count += 1
         elseif rand() < 0.5
             child = make_feasibleR(offspring.genes, violating_drones)
-            fitness, LLnodes = find_fitness(offspring.genes, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
-            offspring = Chromosome(child, LLnodes, fitness, 'F', 0.0)
+            fitness, LLnodes, Real_LLnodes = find_fitness(offspring.genes, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+            offspring = Chromosome(child, LLnodes, Real_LLnodes, fitness, 'F', 0.0)
             push!(Population, offspring)
             feas_count += 1
         else
@@ -140,8 +140,8 @@ function process_child(Population::Vector{Chromosome}, child::Vector{Int64}, TT:
     else
         fractionFeasibleLoad = fractionFeasibleLoad * 0.99
         fractionInFeasibleRLoad = fractionInFeasibleRLoad * 0.99
-        fitness, LLnodes = find_fitness(child, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'M', problem_type)
-        offspring = Chromosome(child, LLnodes, fitness, 'M', 0.0)
+        fitness, LLnodes, Real_LLnodes = find_fitness(child, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'M', problem_type)
+        offspring = Chromosome(child, LLnodes, Real_LLnodes, fitness, 'M', 0.0)
         push!(Population, offspring)
         if offspring.feasible == 'F'
             feas_count += 1
@@ -326,8 +326,9 @@ function Perform_Genetic_Algorithm(TT::Matrix{Float64}, DD::Matrix{Float64}, dEl
     t2 = time()
 
     println("The best objective achieved in ", Gen_num, " generations is: ", round(best_objective(Population), digits=2), " and it took ", round(t2 - t1, digits=2), " seconds.")
-    println("And the best route is: ")
+    println("TSPD Route:")
     Print_best_route(Population)
+
     return Population
 end
 
@@ -335,22 +336,27 @@ end
 function run_GA(problem_type::problem, num_runs::Int64, T::Matrix{Float64}, D::Matrix{Float64},
     flying_range::Float64, sR::Int, sL::Int, drone_not_Eligible::Vector{Int})
 
-     n_nodes = size(T)[1] - 2
+    n_nodes = size(T)[1] - 2
+    if flying_range >= maximum(sum(sort(D, dims=2, rev=true)[:,1:2], dims = 2))
+        flying_range = Inf
+    end
      #GA Parameters
     popsize = (15, 25)  #(mu,sigma)
     k_tournament = 5
     targetFeasible = 0.2
-     h = 0.3
-     num_generations = 2500
+    h = 0.3
+    num_generations = 2500
 
     objs = Float64[]
     times = Float64[]
 
     best_obj_all_time = Inf
     worst_obj = 0.0
-    best_sequence = Int[]
-    best_LLnodes = Int[]
 
+    Routes = TSPD_Route[]
+    # best_sequence = Int[]
+    # best_LLnodes = Int[]
+    # best_chrm = Chromosome(Int[], Int[], Int[], 0.0,'F', 0.0)
     @inbounds for i in 1:num_runs
         initial_chrm = Build_Initial_chromosome(T, D, n_nodes, flying_range, sR, sL)
         t1 = time()
@@ -358,13 +364,22 @@ function run_GA(problem_type::problem, num_runs::Int64, T::Matrix{Float64}, D::M
         P = Perform_Genetic_Algorithm(T, D, drone_not_Eligible, h, popsize, k_tournament, targetFeasible, sR, sL, 
         num_generations, flying_range, initial_chrm, problem_type)
         t2 = time()
+        Route = Return_best_route(P)
+        Route.run_time = t2 - t1
+        push!(Routes, Route)
         current_best = best_objective(P)
+        for chrm in P
+            if chrm.feasible == 'F'
+                best_chrm = chrm
+                break
+            end
+        end
         push!(objs, current_best)
         push!(times, t2 - t1)
         println()
         if current_best < best_obj_all_time
             best_obj_all_time = current_best
-            best_sequence, best_LLnodes = Return_best_route(P)
+            # best_sequence, best_LLnodes = Return_best_route(P)
         end
         if current_best > worst_obj
             worst_obj = current_best
@@ -378,7 +393,8 @@ function run_GA(problem_type::problem, num_runs::Int64, T::Matrix{Float64}, D::M
     println("The average objective found for this instance in ", num_runs, " runs is: ", round(sum(objs) / num_runs, digits=2),
         " ,the best found was: ", round(best_obj_all_time, digits=2), " and the worst found was: ", round(worst_obj, digits=2))
     println("The average time for each runs is: ", round(sum(times) / num_runs, digits=2))
-    return worst_obj, best_obj_all_time, mean(objs), mean(times)
+    # return worst_obj, best_obj_all_time, mean(objs), mean(times)
+    return Routes
 end
 
 

@@ -907,20 +907,20 @@ function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matr
         c = methods[r](chrmF, ClosenessT, ClosenessD)
         violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if length(violating_drones) == 0
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
             if f < best_fF
                 if length(substituesF) < max_size
-                    push!(substituesF, Chromosome(c, llc, f, 'F', 0.0))
+                    push!(substituesF, Chromosome(c, llc, rllc, f, 'F', 0.0))
                     push!(fsF, f)
                 else
                     sort!(substituesF, by=x -> x.fitness)
-                    substituesF[max_size] = Chromosome(c, llc, f, 'F', 0.0)
+                    substituesF[max_size] = Chromosome(c, llc, rllc, f, 'F', 0.0)
                     sort!(fsF)
                     fsF[max_size] = f
                 end
                 best_fF = f
             elseif f > best_fF
-                temp = Chromosome(c, llc, f, 'F', 0.0)
+                temp = Chromosome(c, llc, rllc, f, 'F', 0.0)
                 if !(f in fsF)
                     if (f - best_fF) / best_fF < allowed_diff
                         if length(substituesF) < max_size
@@ -936,20 +936,20 @@ function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matr
                 end
             end
         else
-            f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+            f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
             if f < best_fR
                 if length(substituesR) < max_size
-                    push!(substituesR, Chromosome(c, llc, f, 'R', 0.0))
+                    push!(substituesR, Chromosome(c, llc, rllc, f, 'R', 0.0))
                     push!(fsR, f)
                 else
                     sort!(substituesR, by=x -> x.fitness)
-                    substituesR[max_size] = Chromosome(c, llc, f, 'R', 0.0)
+                    substituesR[max_size] = Chromosome(c, llc, rllc, f, 'R', 0.0)
                     sort!(fsR)
                     fsR[max_size] = f
                 end
                 best_fR = f
             elseif f > best_fR
-                temp = Chromosome(c, llc, f, 'R', 0.0)
+                temp = Chromosome(c, llc, rllc, f, 'R', 0.0)
                 if !(f in fsR)
                     if (f - best_fR) / best_fR < allowed_diff
                         if length(substituesR) < max_size
@@ -974,35 +974,35 @@ function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matr
             c = methods[r](chrmR, ClosenessT, ClosenessD)
             violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
             if length(violating_drones) == 0
-                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 if f < best_fF
                     if length(substituesF) < max_size
-                        push!(substituesF, Chromosome(c, llc, f, 'F', 0.0))
+                        push!(substituesF, Chromosome(c, llc, rllc, f, 'F', 0.0))
                         push!(fsF, f)
                     else
                         sort!(substituesF, by=x -> x.fitness)
-                        substituesF[max_size] = Chromosome(c, llc, f, 'F', 0.0)
+                        substituesF[max_size] = Chromosome(c, llc, rllc, f, 'F', 0.0)
                         sort!(fsF)
                         fsF[max_size] = f
                     end
                     best_fF = f
                 end
             else
-                f, llc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+                f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
                 if f < best_fR
 
                     if length(substituesR) < max_size
-                        push!(substituesR, Chromosome(c, llc, f, 'R', 0.0))
+                        push!(substituesR, Chromosome(c, llc, rllc, f, 'R', 0.0))
                         push!(fsR, f)
                     else
                         sort!(substituesR, by=x -> x.fitness)
-                        substituesR[max_size] = Chromosome(c, llc, f, 'R', 0.0)
+                        substituesR[max_size] = Chromosome(c, llc, rllc, f, 'R', 0.0)
                         sort!(fsR)
                         fsR[max_size] = f
                     end
                     best_fR = f
                 elseif f > best_fR
-                    temp = Chromosome(c, llc, f, 'R', 0.0)
+                    temp = Chromosome(c, llc, rllc, f, 'R', 0.0)
                     if !(f in fsR)
                         if (f - best_fR) / best_fR < allowed_diff
                             if length(substituesR) < max_size

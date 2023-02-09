@@ -40,7 +40,7 @@ end
 
 function find_fitness(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{Float64}, flying_range::Float64,
      sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, feasibility::Char, problem_type::problem)
-    if problem_type == "TSPD"
+    if problem_type == TSPD
         if feasibility == 'F'
             return find_fitness_F_TSPD(c, TT, DD, flying_range)
         elseif feasibility == 'R'
@@ -174,19 +174,19 @@ function find_fitness_F_FSTSP(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{
     end
 
     # LLnodesLoc = Vector{Int64}()
-    nLL = length(LLnodes)
-    l = 1
-    if length(LLnodes) > 0
-        @inbounds for i = 1:n_nodes
-            if c[i] == LLnodes[l]
-                push!(LLnodesLoc, i)
-                l += 1
-            end
-            if l > nLL
-                break
-            end
-        end
-    end
+    # nLL = length(LLnodes)
+    # l = 1
+    # if length(LLnodes) > 0
+    #     @inbounds for i = 1:n_nodes
+    #         if c[i] == LLnodes[l]
+    #             push!(LLnodesLoc, i)
+    #             l += 1
+    #         end
+    #         if l > nLL
+    #             break
+    #         end
+    #     end
+    # end
     return M[1].f_value, LLnodesLoc
 end
 
@@ -302,19 +302,19 @@ function find_fitness_infR_FSTSP(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matr
     end
 
     # LLnodesLoc = []
-    nLL = length(LLnodes)
-    l = 1
-    if nLL > 0
-        @inbounds for i = 1:n_nodes
-            if c[i] == LLnodes[l]
-                push!(LLnodesLoc, i)
-                l += 1
-            end
-            if l > nLL
-                break
-            end
-        end
-    end
+    # nLL = length(LLnodes)
+    # l = 1
+    # if nLL > 0
+    #     @inbounds for i = 1:n_nodes
+    #         if c[i] == LLnodes[l]
+    #             push!(LLnodesLoc, i)
+    #             l += 1
+    #         end
+    #         if l > nLL
+    #             break
+    #         end
+    #     end
+    # end
     return M[1].f_value, LLnodesLoc
 end
 
@@ -479,17 +479,17 @@ function find_fitness_infM_FSTSP(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matr
     end
 
     # LLnodesLoc = []
-    nLL = length(LLnodes)
-    l = 1
-    @inbounds for i = 1:n_nodes
-        if c[i] == LLnodes[l]
-            push!(LLnodesLoc, i)
-            l += 1
-        end
-        if l > nLL
-            break
-        end
-    end
+    # nLL = length(LLnodes)
+    # l = 1
+    # @inbounds for i = 1:n_nodes
+    #     if c[i] == LLnodes[l]
+    #         push!(LLnodesLoc, i)
+    #         l += 1
+    #     end
+    #     if l > nLL
+    #         break
+    #     end
+    # end
     return M[1].f_value, LLnodesLoc
 end
 
@@ -554,6 +554,7 @@ function find_fitness_F_TSPD(cc::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{
 
     LLnodes = Int[]
     LLnodesLoc = Int[]
+    Real_LLnodesLoc = Int[]
     k = n_nodes+1
     for i=1:num_t_nodes
         j = num_t_nodes-i+1
@@ -561,11 +562,19 @@ function find_fitness_F_TSPD(cc::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{
             if M[j].prev_action<0
                 k = -M[j].prev_action
                 if M[j].tnode != n_nodes+1
-                    push!(LLnodes,M[j].tnode)
+                    push!(LLnodes, M[j].tnode)
                 end
-                x = findfirst(x->x==M[j].tnode,c)
+                if M[j].tnode == n_nodes+1
+                    push!(Real_LLnodesLoc, n_nodes+1)
+                end
+                
+                x = findfirst(x->x==M[j].tnode, c)
                 if !isnothing(x)
                     push!(LLnodesLoc, x)
+                    push!(Real_LLnodesLoc, x)
+                end
+                if M[j].prev_action == -(n_nodes+2)
+                    push!(Real_LLnodesLoc, 0)
                 end
                 if k==n_nodes+2 || k==0
                     break
@@ -577,11 +586,12 @@ function find_fitness_F_TSPD(cc::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{
     end
     reverse!(LLnodes)
     reverse!(LLnodesLoc)
+    reverse!(Real_LLnodesLoc)
     if n_nodes+1 in LLnodes
         pop!(LLnodes)
         pop!(LLnodesLoc)
     end
-    return M[num_t_nodes].f_value, LLnodesLoc
+    return M[num_t_nodes].f_value, LLnodesLoc, Real_LLnodesLoc
 end
             
 
@@ -642,6 +652,7 @@ function find_fitness_infR_TSPD(cc::Vector{Int64}, TT::Matrix{Float64}, DD::Matr
 
     LLnodes = Int[]
     LLnodesLoc = Int[]
+    Real_LLnodesLoc = Int[]
     k = n_nodes+1
     for i=1:num_t_nodes
         j = num_t_nodes-i+1
@@ -649,12 +660,19 @@ function find_fitness_infR_TSPD(cc::Vector{Int64}, TT::Matrix{Float64}, DD::Matr
             if M[j].prev_action<0
                 k = -M[j].prev_action
                 if M[j].tnode != n_nodes+1
-                    push!(LLnodes,M[j].tnode)
+                    push!(LLnodes, M[j].tnode)
                 end
-                x = findfirst(x->x==M[j].tnode,c)
+                if M[j].tnode == n_nodes+1
+                    push!(Real_LLnodesLoc, n_nodes+1)
+                end
+                
+                x = findfirst(x->x==M[j].tnode, c)
                 if !isnothing(x)
-
-                    push!(LLnodesLoc,x)
+                    push!(LLnodesLoc, x)
+                    push!(Real_LLnodesLoc, x)
+                end
+                if M[j].prev_action == -(n_nodes+2)
+                    push!(Real_LLnodesLoc, 0)
                 end
                 if k==n_nodes+2 || k==0
                     break
@@ -666,11 +684,12 @@ function find_fitness_infR_TSPD(cc::Vector{Int64}, TT::Matrix{Float64}, DD::Matr
     end
     reverse!(LLnodes)
     reverse!(LLnodesLoc)
+    reverse!(Real_LLnodesLoc)
     if n_nodes+1 in LLnodes
         pop!(LLnodes)
         pop!(LLnodesLoc)
     end
-    return M[num_t_nodes].f_value, LLnodesLoc
+    return M[num_t_nodes].f_value, LLnodesLoc, Real_LLnodesLoc
 end
 
 function find_fitness_infM_TSPD(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{Float64}, flying_range::Float64,
@@ -730,6 +749,7 @@ function find_fitness_infM_TSPD(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matri
     end
     LLnodes = Int[]
     LLnodesLoc = Int[]
+    Real_LLnodesLoc = Int[]
     k = n_nodes+1
     for i=1:num_t_nodes
         j = num_t_nodes-i+1
@@ -737,11 +757,19 @@ function find_fitness_infM_TSPD(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matri
             if M[j].prev_action<0
                 k = -M[j].prev_action
                 if M[j].tnode != n_nodes+1
-                    push!(LLnodes,M[j].tnode)
+                    push!(LLnodes, M[j].tnode)
                 end
-                x = findfirst(x->x==M[j].tnode,c)
+                if M[j].tnode == n_nodes+1
+                    push!(Real_LLnodesLoc, n_nodes+1)
+                end
+                
+                x = findfirst(x->x==M[j].tnode, c)
                 if !isnothing(x)
                     push!(LLnodesLoc, x)
+                    push!(Real_LLnodesLoc, x)
+                end
+                if M[j].prev_action == -(n_nodes+2)
+                    push!(Real_LLnodesLoc, 0)
                 end
                 if k==n_nodes+2 || k==0
                     break
@@ -753,9 +781,112 @@ function find_fitness_infM_TSPD(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matri
     end
     reverse!(LLnodes)
     reverse!(LLnodesLoc)
+    reverse!(Real_LLnodesLoc)
     if n_nodes+1 in LLnodes
         pop!(LLnodes)
         pop!(LLnodesLoc)
     end
-    return M[num_t_nodes].f_value, LLnodesLoc
+    return M[num_t_nodes].f_value, LLnodesLoc, Real_LLnodesLoc
 end
+
+
+
+function DP_test(cc::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{Float64}, flying_range::Float64)
+    c = copy(cc)
+    n_nodes = length(c)
+    tnodes, num_t_nodes = find_tnodes(c, n_nodes)
+    inv_tnodes = Dict{Int64, Int64}()
+    for i=1:num_t_nodes
+        inv_tnodes[tnodes[i]] = i
+    end
+
+    M = Vector{Tr_node}()
+    for i=1:num_t_nodes
+        push!(M,Tr_node(tnodes[i],0,Int[],Int[],Inf,0))
+    end
+    M[1].f_value = 0
+
+    for i=2:num_t_nodes
+        if i==num_t_nodes
+            tnode_loc = length(c)+1
+        else
+            tnode_loc = findfirst(x->x==tnodes[i], c)
+        end
+        if tnode_loc == 1 
+            M[i].after_drone = [0]
+        else
+            if c[tnode_loc-1]<0
+                M[i].before_drone = copy(M[i-1].after_drone)
+                M[i].dnode = -c[tnode_loc-1]
+                push!(M[i].before_drone, tnodes[i-1])
+            else
+                M[i].before_drone = copy(M[i-1].before_drone)
+                M[i].after_drone = copy(M[i-1].after_drone)
+                M[i].dnode = M[i-1].dnode
+                push!(M[i].after_drone, tnodes[i-1])
+            end
+        end
+        
+        for j in M[i].before_drone
+            dtime = DD[j+1,M[i].dnode+1]+DD[M[i].dnode+1,tnodes[i]+1]
+            if dtime < flying_range
+                temp = M[inv_tnodes[j]].f_value + max(truck_time(TT, tnodes, inv_tnodes, j, tnodes[i]), dtime)
+                if temp < M[i].f_value
+                    M[i].f_value = temp
+                    M[i].prev_action = -(j + (n_nodes+2)*Int(j==0))
+                end
+            end
+        end
+        for j in M[i].after_drone
+            temp = M[inv_tnodes[j]].f_value + truck_time(TT, tnodes, inv_tnodes, j, tnodes[i])
+            if temp < M[i].f_value
+                M[i].f_value = temp
+                M[i].prev_action = j
+            end
+        end
+
+    end
+
+
+    LLnodes = Int[]
+    LLnodesLoc = Int[]
+    Real_LLnodesLoc = Int[]
+    k = n_nodes+1
+    for i=1:num_t_nodes
+        j = num_t_nodes-i+1
+        if M[j].tnode == k
+            if M[j].prev_action<0
+                k = -M[j].prev_action
+                if M[j].tnode != n_nodes+1
+                    push!(LLnodes, M[j].tnode)
+                end
+                if M[j].tnode == n_nodes+1
+                    push!(Real_LLnodesLoc, n_nodes+1)
+                end
+                
+                x = findfirst(x->x==M[j].tnode, c)
+                if !isnothing(x)
+                    push!(LLnodesLoc, x)
+                    push!(Real_LLnodesLoc, x)
+                end
+                if M[j].prev_action == -(n_nodes+2)
+                    push!(Real_LLnodesLoc, 0)
+                end
+                if k==n_nodes+2 || k==0
+                    break
+                end
+            else
+                k = M[j].prev_action
+            end
+        end
+    end
+    reverse!(LLnodes)
+    reverse!(LLnodesLoc)
+    reverse!(Real_LLnodesLoc)
+    if n_nodes+1 in LLnodes
+        pop!(LLnodes)
+        pop!(LLnodesLoc)
+    end
+    return M[num_t_nodes].f_value, LLnodesLoc, Real_LLnodesLoc
+end
+            

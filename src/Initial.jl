@@ -159,8 +159,8 @@ function Generate_initial_population(mu::Int64, TT::Matrix{Float64}, DD::Matrix{
     Population = Chromosome[]
     # chrm = Build_Initial_chromosome(TT, DD, n_nodes, flying_range, sR, sL)
     chrm = initial_chrm
-    f, LLnodes = find_fitness(chrm, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
-    push!(Population, Chromosome(chrm, LLnodes, f, 'F', 0.0))
+    f, LLnodes, Real_LLnodes = find_fitness(chrm, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+    push!(Population, Chromosome(chrm, LLnodes, Real_LLnodes, f, 'F', 0.0))
     count_f = 1
     count_infR = 0
     count_infM = 0
@@ -181,8 +181,8 @@ function Generate_initial_population(mu::Int64, TT::Matrix{Float64}, DD::Matrix{
                     if length(violating_drones) > 0
                         cr = make_feasibleR(cr, violating_drones)
                     end
-                    f, LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
-                    push!(Population, Chromosome(cr, LLnodes, f, 'F', 0.0))
+                    f, LLnodes, Real_LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                    push!(Population, Chromosome(cr, LLnodes, Real_LLnodes, f, 'F', 0.0))
                     count_f += 1
                 end
             else
@@ -193,13 +193,13 @@ function Generate_initial_population(mu::Int64, TT::Matrix{Float64}, DD::Matrix{
                 violating_drones = Is_feasibleR(cr, DD, TT, dEligible, flying_range, sR, sL, problem_type)
                 if length(violating_drones) == 0
                     if count_f < mu
-                        f, LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
-                        push!(Population, Chromosome(cr, LLnodes, f, 'F', 0.0))
+                        f, LLnodes, Real_LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                        push!(Population, Chromosome(cr, LLnodes, Real_LLnodes, f, 'F', 0.0))
                         count_f += 1
                     end
                 else
-                    f, LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
-                    push!(Population, Chromosome(cr, LLnodes, f, 'R', 0.0))
+                    f, LLnodes, Real_LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+                    push!(Population, Chromosome(cr, LLnodes, Real_LLnodes, f, 'R', 0.0))
                     count_infR += 1
                 end
             end
@@ -209,18 +209,18 @@ function Generate_initial_population(mu::Int64, TT::Matrix{Float64}, DD::Matrix{
                 violating_drones = Is_feasibleR(cr, DD, TT, dEligible, flying_range, sR, sL, problem_type)
                 if length(violating_drones) == 0
                     if count_f < mu
-                        f, LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
-                        push!(Population, Chromosome(cr, LLnodes, f, 'F', 0.0))
+                        f, LLnodes, Real_LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                        push!(Population, Chromosome(cr, LLnodes, Real_LLnodes, f, 'F', 0.0))
                         count_f += 1
                     end
                 elseif count_infR < mu
-                    f, LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
-                    push!(Population, Chromosome(cr, LLnodes, f, 'R', 0.0))
+                    f, LLnodes, Real_LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+                    push!(Population, Chromosome(cr, LLnodes, Real_LLnodes, f, 'R', 0.0))
                     count_infR += 1
                 end
             else
-                f, LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'M', problem_type)
-                push!(Population, Chromosome(cr, LLnodes, f, 'M', 0.0))
+                f, LLnodes, Real_LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'M', problem_type)
+                push!(Population, Chromosome(cr, LLnodes, Real_LLnodes, f, 'M', 0.0))
                 count_infM += 1
             end
         end
@@ -286,10 +286,11 @@ function Diversify(Population::Vector{Chromosome}, mu::Int64, TT::Matrix{Float64
                 if length(violating_drones) > 0
                     cr = make_feasibleR(cr, violating_drones)
                 end
-                f, LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
+                f, LLnodes, Real_LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 Population[i].genes = cr
                 Population[i].fitness = f
                 Population[i].LLnodes = LLnodes
+                Population[i].Real_LLnodes = Real_LLnodes
             end
         elseif Population[i].feasible == 'R'
             if infeasR_count < n_best
@@ -301,10 +302,11 @@ function Diversify(Population::Vector{Chromosome}, mu::Int64, TT::Matrix{Float64
                 end
                 violating_drones = Is_feasibleR(cr, DD, TT, dEligible, flying_range, sR, sL, problem_type)
                 if length(violating_drones) > 0
-                    f, LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
+                    f, LLnodes, Real_LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'R', problem_type)
                     Population[i].genes = cr
                     Population[i].fitness = f
                     Population[i].LLnodes = LLnodes
+                    Population[i].Real_LLnodes = Real_LLnodes
                 end
             end
         else
@@ -313,10 +315,11 @@ function Diversify(Population::Vector{Chromosome}, mu::Int64, TT::Matrix{Float64
             else
                 cr = Change_initial(chrm)
                 if !Is_feasibleM(cr)
-                    f, LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'M', problem_type)
+                    f, LLnodes, Real_LLnodes = find_fitness(cr, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'M', problem_type)
                     Population[i].genes = cr
                     Population[i].fitness = f
                     Population[i].LLnodes = LLnodes
+                    Population[i].Real_LLnodes = Real_LLnodes
                 end
             end
         end

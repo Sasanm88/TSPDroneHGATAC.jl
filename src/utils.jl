@@ -6,9 +6,17 @@ end
 mutable struct Chromosome
     genes::Vector{Int64}      #Represents the sequence and the types of nodes, positive number means the node is visited by truck, while negative is for drone 
     LLnodes::Vector{Int64}    #Represents the location of luanch and land nodes so along with genes it gives us the tour
+    Real_LLnodes::Vector{Int64}
     fitness::Float64          #This is the Makespan of the given sequence found by JOIN algorithm (smaller, better)
     feasible::Char            #'F': feasible, 'R':infeasible type range, 'M':infeasible type multiple drone nodes   (In TSPD with unlimited flight range, there would be no 'R')
     power::Float64            # This is the fitness after considering the diversity contribution (smaller, better)
+end
+
+mutable struct TSPD_Route
+    Truck_Route::Vector{Int}
+    Drone_Route::Vector{Int}
+    Cmax::Float64
+    run_time::Float64
 end
 
 function Is_feasibleM(c::Vector{Int64})
@@ -225,11 +233,41 @@ function Print_best_route(Population::Vector{Chromosome})
 end
 
 function Return_best_route(Population::Vector{Chromosome})
+    Best_Route = TSPD_Route([0], Int[], 0.0, 0.0)
+    chrm = Population[1]
+    n = length(chrm.genes)
     @inbounds for i in 1:length(Population)
         if Population[i].feasible == 'F'
-            return Population[i].genes, Population[i].LLnodes
+            chrm = Population[i]
+            break
         end
     end
+    for i in chrm.genes
+        if i>0
+            push!(Best_Route.Truck_Route, i)
+        end
+    end
+    push!(Best_Route.Truck_Route, 0)
+
+    d = 1
+    if chrm.Real_LLnodes[1] == 0
+        d += 1
+        push!(Best_Route.Drone_Route, 0)
+    end
+    for i=1:n
+        if i == chrm.Real_LLnodes[d]
+            push!(Best_Route.Drone_Route, chrm.genes[i])
+            d += 1
+        end
+        if chrm.genes[i] < 0
+            push!(Best_Route.Drone_Route, -chrm.genes[i]) 
+        end
+    end
+    if chrm.Real_LLnodes[length(chrm.Real_LLnodes)] == n+1
+        push!(Best_Route.Drone_Route, 0) 
+    end
+    Best_Route.Cmax = chrm.fitness
+    return Best_Route
 end
 
 function Find_Closeness(TT::Matrix{Float64}, DD::Matrix{Float64}, h::Float64)
