@@ -228,7 +228,7 @@ function Generate_initial_population(mu::Int64, TT::Matrix{Float64}, DD::Matrix{
     sort!(Population, by=x -> x.fitness)
     best_f = best_objective(Population)
     t2 = time()
-    println("Generation 1", " the best objective is: ", round(best_f, digits=2), " and it took ", round(t2 - t1, digits=2), " seconds.")
+    # println("Generation 1", " the best objective is: ", round(best_f, digits=2), " and it took ", round(t2 - t1, digits=2), " seconds.")
     return Population, best_f
 end
 

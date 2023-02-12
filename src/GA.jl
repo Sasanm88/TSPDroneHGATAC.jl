@@ -283,9 +283,9 @@ function Generate_new_generation(TT::Matrix{Float64}, DD::Matrix{Float64}, dElig
     t2 = time()
     Gen_num += 1
 
-    if Gen_num % 1000 == 0
-        println("Generation ", Gen_num, " the best objective found so far is: ", round(old_best, digits=2))
-    end
+    # if Gen_num % 1000 == 0
+    #     println("Generation ", Gen_num, " the best objective found so far is: ", round(old_best, digits=2))
+    # end
     return Gen_num, feas_count, InfR_count, InfM_count, penaltyR, penaltyM, old_best, fractionFeasibleLoad, fractionInFeasibleRLoad, Population, improve_count
 end
 
@@ -310,12 +310,6 @@ function Perform_Genetic_Algorithm(TT::Matrix{Float64}, DD::Matrix{Float64}, dEl
     fractionFeasibleLoad = 0.2
     fractionInFeasibleRLoad = 0.4
 
-
-    # TODO: 
-    # static_info and dynamic_info should better be struct
-    # Please create 
-    # struct StaticInfo  and struct DynamicInfo
-
     @inbounds while improve_count < num_iter
         Gen_num, feas_count, InfR_count, InfM_count, penaltyR, penaltyM, old_best, fractionFeasibleLoad, fractionInFeasibleRLoad,
         Population, improve_count = Generate_new_generation(TT, DD, dEligible, flying_range, popsize, k_tournament, targetFeasible, sR, sL,
@@ -326,8 +320,6 @@ function Perform_Genetic_Algorithm(TT::Matrix{Float64}, DD::Matrix{Float64}, dEl
     t2 = time()
 
     println("The best objective achieved in ", Gen_num, " generations is: ", round(best_objective(Population), digits=2), " and it took ", round(t2 - t1, digits=2), " seconds.")
-    println("TSPD Route:")
-    Print_best_route(Population)
 
     return Population
 end
@@ -347,16 +339,8 @@ function run_GA(problem_type::problem, num_runs::Int64, T::Matrix{Float64}, D::M
     h = 0.3
     num_generations = 2500
 
-    objs = Float64[]
-    times = Float64[]
-
-    best_obj_all_time = Inf
-    worst_obj = 0.0
-
     Routes = TSPD_Route[]
-    # best_sequence = Int[]
-    # best_LLnodes = Int[]
-    # best_chrm = Chromosome(Int[], Int[], Int[], 0.0,'F', 0.0)
+
     @inbounds for i in 1:num_runs
         initial_chrm = Build_Initial_chromosome(T, D, n_nodes, flying_range, sR, sL)
         t1 = time()
@@ -367,33 +351,11 @@ function run_GA(problem_type::problem, num_runs::Int64, T::Matrix{Float64}, D::M
         Route = Return_best_route(P)
         Route.run_time = t2 - t1
         push!(Routes, Route)
-        current_best = best_objective(P)
-        for chrm in P
-            if chrm.feasible == 'F'
-                best_chrm = chrm
-                break
-            end
-        end
-        push!(objs, current_best)
-        push!(times, t2 - t1)
-        println()
-        if current_best < best_obj_all_time
-            best_obj_all_time = current_best
-            # best_sequence, best_LLnodes = Return_best_route(P)
-        end
-        if current_best > worst_obj
-            worst_obj = current_best
-        end
+
     end
 
     println()
 
-    println("Genetic Algorithm results for solving this instance for ", num_runs, " times:")
-    println()
-    println("The average objective found for this instance in ", num_runs, " runs is: ", round(sum(objs) / num_runs, digits=2),
-        " ,the best found was: ", round(best_obj_all_time, digits=2), " and the worst found was: ", round(worst_obj, digits=2))
-    println("The average time for each runs is: ", round(sum(times) / num_runs, digits=2))
-    # return worst_obj, best_obj_all_time, mean(objs), mean(times)
     return Routes
 end
 
