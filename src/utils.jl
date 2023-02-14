@@ -248,13 +248,20 @@ function Return_best_route(Population::Vector{Chromosome})
         end
     end
     push!(Best_Route.Truck_Route, 0)
+    Best_Route.Cmax = chrm.fitness
 
+    if length(chrm.Real_LLnodes) == 0
+        return Best_Route
+    end
     d = 1
     if chrm.Real_LLnodes[1] == 0
         d += 1
         push!(Best_Route.Drone_Route, 0)
     end
     for i=1:n
+        if d > length(chrm.Real_LLnodes)
+            break
+        end
         if i == chrm.Real_LLnodes[d]
             push!(Best_Route.Drone_Route, chrm.genes[i])
             d += 1
@@ -266,7 +273,7 @@ function Return_best_route(Population::Vector{Chromosome})
     if chrm.Real_LLnodes[length(chrm.Real_LLnodes)] == n+1
         push!(Best_Route.Drone_Route, 0) 
     end
-    Best_Route.Cmax = chrm.fitness
+    
     return Best_Route
 end
 

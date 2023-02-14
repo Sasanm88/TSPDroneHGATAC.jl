@@ -26,9 +26,9 @@ function solve_tspd_by_HGA_TAC(problem_type::problem, num_runs::Int64, depot::Ve
 end
 
 
-depot, Customers, dEligible = Read_TSPLIB_instance(:berlin52)
-T, D = Calculate_duration_matrices(40.0, 40.0, depot, Customers, FSTSP)
-solve_tspd_by_HGA_TAC(FSTSP, 5, T, D, drone_not_Eligible = dEligible, flying_range = 40.0, sR = 1, sL = 1)
+# depot, Customers, dEligible = Read_TSPLIB_instance(:berlin52)
+# T, D = Calculate_duration_matrices(40.0, 40.0, depot, Customers, FSTSP)
+# solve_tspd_by_HGA_TAC(FSTSP, 5, T, D, drone_not_Eligible = dEligible, flying_range = 40.0, sR = 1, sL = 1)
 
 # P = solve_tspd_by_HGA_TAC(FSTSP, 5, depot, Customers, 40.0, 40.0, drone_not_Eligible = dEligible, flying_range = 40.0, sR = 1, sL = 1)
 # T, D = Calculate_duration_matrices(40.0, 40.0, depot, Customers, FSTSP)

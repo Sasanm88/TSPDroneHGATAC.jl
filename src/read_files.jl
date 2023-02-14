@@ -31,8 +31,9 @@ function Calculate_distance_matrices_Agatz(alpha::Float64, depot::Tuple{Float64,
 end 
 
 function read_data_Agatz(sample::String)
+    distribution = split(sample, "-")[1]
     curdir = pwd()
-    filename = joinpath(curdir, "..", "TSP-D-Instances-Agatz/uniform/$(sample).txt")
+    filename = joinpath(curdir, "Test_instances/TSPD-Instances-Agatz/$(distribution)/$(sample).txt")
     f = open(filename, "r")
     lines = readlines(f)
     
@@ -50,7 +51,7 @@ end
 
 function read_data_Agatz_restricted(sample::String)
     curdir = pwd()
-    filename = joinpath(curdir, "..", "TSP-D-Instances-Agatz/restricted/maxradius/$(sample).txt")
+    filename = joinpath(curdir, "Test_instances/TSPD-Instances-Agatz/restricted/maxradius/$(sample).txt")
     f = open(filename, "r")
     lines = readlines(f)
     flying_range = parse(Float64,split(lines[1]," ")[2])
@@ -64,6 +65,23 @@ function read_data_Agatz_restricted(sample::String)
     end
     T, D = Calculate_distance_matrices_Agatz(alpha, depot, customers)
     return T, D, flying_range
+end
+
+function read_data_Bogyrbayeva(file_name::String, sample_number::Int)
+    distribution, _, n_nodes_ = split(file_name, "-")
+    n_nodes = parse(Int, n_nodes_)
+    curdir = pwd()
+    filename = joinpath(curdir, "Test_instances/TSPD-Instances-Bogyrbayeva/$(distribution)/$(file_name).txt")
+    f = open(filename, "r")
+    lines = readlines(f)
+    data = parse.(Float64, split(lines[sample_number]," "))
+    depot = [data[1], data[2]]
+    customers = zeros(n_nodes-1, 2)
+    for i = 2:n_nodes
+        customers[i-1, 1] = data[2*i-1]
+        customers[i-1, 2] = data[2*i]
+    end
+    return depot, customers
 end
 
 using TSPLIB
