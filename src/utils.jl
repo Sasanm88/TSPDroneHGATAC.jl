@@ -149,7 +149,7 @@ function find_beforeANDafter_nodes(c::Vector{Int64}, TT::Matrix{Float64}, proble
 end
 
 function Is_feasibleR(c::Vector{Int64}, DD::Matrix{Float64}, TT::Matrix{Float64}, dEligible::Vector{Int64},
-     flying_range::Float64, sR::Int, sL::Int, problem_type::problem)   #Not required for unlimited TSPD
+     flying_range::Float64, sR::Float64, sL::Float64, problem_type::problem)   #Not required for unlimited TSPD
     
     violating_nodes = Vector{Int64}()
     if flying_range == Inf        #For some problems, flying_range is not Inf but technically is. We should manually take care of this

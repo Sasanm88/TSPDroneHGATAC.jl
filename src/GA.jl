@@ -85,7 +85,7 @@ end
 
 function process_child(Population::Vector{Chromosome}, child::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{Float64},
     dEligible::Vector{Int64}, flying_range::Float64, penaltyR::Float64, penaltyM::Float64, fractionFeasibleLoad::Float64,
-    fractionInFeasibleRLoad::Float64, feas_count::Int64, InfR_count::Int64, InfM_count::Int64, sR::Int64, sL::Int64,
+    fractionInFeasibleRLoad::Float64, feas_count::Int64, InfR_count::Int64, InfM_count::Int64, sR::Float64, sL::Float64,
      ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, problem_type::problem)
     n_nodes = length(child)
     if Is_feasibleM(child)
@@ -239,7 +239,7 @@ end
 
 
 function Generate_new_generation(TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, flying_range::Float64,
-    popsize::Tuple{Int64,Int64}, k_tournament::Int64, targetFeasible::Float64, sR::Int, sL::Int, ClosenessT::Matrix{Int64},
+    popsize::Tuple{Int64,Int64}, k_tournament::Int64, targetFeasible::Float64, sR::Float64, sL::Float64, ClosenessT::Matrix{Int64},
     ClosenessD::Matrix{Int64}, initial_chrm::Vector{Int64}, Gen_num::Int64, feas_count::Int64, InfR_count::Int64, InfM_count::Int64,
     penaltyR::Float64, penaltyM::Float64, old_best::Float64, fractionFeasibleLoad::Float64, fractionInFeasibleRLoad::Float64,
     Population::Vector{Chromosome}, improve_count::Int64, problem_type::problem)
@@ -292,7 +292,7 @@ end
 
 
 function Perform_Genetic_Algorithm(TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, h::Float64, popsize::Tuple{Int64,Int64},
-    k_tournament::Int64, targetFeasible::Float64, sR::Int64, sL::Int64, num_iter::Int64, flying_range::Float64, initial_chrm::Vector{Int64}, problem_type::problem)
+    k_tournament::Int64, targetFeasible::Float64, sR::Float64, sL::Float64, num_iter::Int64, flying_range::Float64, initial_chrm::Vector{Int64}, problem_type::problem)
     n_nodes = size(TT)[1] - 2
     t1 = time()
     ClosenessT, ClosenessD = Find_Closeness(TT, DD, h)
@@ -326,7 +326,7 @@ end
 
 
 function run_GA(problem_type::problem, num_runs::Int64, T::Matrix{Float64}, D::Matrix{Float64},
-    flying_range::Float64, sR::Int, sL::Int, drone_not_Eligible::Vector{Int})
+    flying_range::Float64, sR::Float64, sL::Float64, drone_not_Eligible::Vector{Int})
 
     n_nodes = size(T)[1] - 2
     if flying_range >= maximum(sum(sort(D, dims=2, rev=true)[:,1:2], dims = 2))

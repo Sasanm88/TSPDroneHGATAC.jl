@@ -39,7 +39,7 @@ end
 
 
 function find_fitness(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{Float64}, flying_range::Float64,
-     sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, feasibility::Char, problem_type::problem)
+     sR::Float64, sL::Float64, penaltyR::Float64, penaltyM::Float64, feasibility::Char, problem_type::problem)
     if problem_type == TSPD
         if feasibility == 'F'
             return find_fitness_F_TSPD(c, TT, DD, flying_range)
@@ -62,7 +62,7 @@ end
 
 
 function find_fitness_F_FSTSP(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{Float64}, flying_range::Float64,
-     sR::Int64, sL::Int64)
+     sR::Float64, sL::Float64)
     n_nodes = length(c)
     tnodes, num_t_nodes = find_tnodes(c, n_nodes)
     inv_tnodes = Dict{Int64,Int64}()
@@ -184,7 +184,7 @@ function find_fitness_F_FSTSP(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{
 
 
 function find_fitness_infR_FSTSP(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{Float64}, 
-    flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64)
+    flying_range::Float64, sR::Float64, sL::Float64, penaltyR::Float64)
     n_nodes = length(c)
     tnodes, num_t_nodes = find_tnodes(c, n_nodes)
     inv_tnodes = Dict{Int64,Int64}()
@@ -349,7 +349,7 @@ function drone_time(DD::Matrix{Float64}, dnodes::Vector{Int64}, start::Int64, fi
 end
 
 function find_fitness_infM_FSTSP(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{Float64}, 
-    flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64)
+    flying_range::Float64, sR::Float64, sL::Float64, penaltyR::Float64, penaltyM::Float64)
     n_nodes = length(c)
     tnodes, dnodes, num_t_nodes = find_tdnodes(c, n_nodes)
     inv_tnodes = Dict{Int64,Int64}()
@@ -764,7 +764,7 @@ end
 
 
 function DP_test(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{Float64}, flying_range::Float64,
-    sR::Int64, sL::Int64)
+    sR::Float64, sL::Float64)
    n_nodes = length(c)
    tnodes, num_t_nodes = find_tnodes(c, n_nodes)
    inv_tnodes = Dict{Int64,Int64}()

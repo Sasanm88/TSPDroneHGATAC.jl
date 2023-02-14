@@ -29,7 +29,7 @@ end
 
 # MAX_DRONE_RANGE = Inf
 
-function exact_p(initial_tour::Vector{Int64}, Ct::Matrix{Float64}, Cd::Matrix{Float64}, flying_range::Float64, sR::Int64, sL::Int64)
+function exact_p(initial_tour::Vector{Int64}, Ct::Matrix{Float64}, Cd::Matrix{Float64}, flying_range::Float64, sR::Float64, sL::Float64)
     n, _ = size(Ct)
 
     r = initial_tour
@@ -111,7 +111,7 @@ function exact_p(initial_tour::Vector{Int64}, Ct::Matrix{Float64}, Cd::Matrix{Fl
     return final_time, c
 end
 
-function Build_Initial_chromosome(TT::Matrix{Float64}, DD::Matrix{Float64}, n_nodes::Int64, flying_range::Float64, sR::Int64, sL::Int64)
+function Build_Initial_chromosome(TT::Matrix{Float64}, DD::Matrix{Float64}, n_nodes::Int64, flying_range::Float64, sR::Float64, sL::Float64)
     tour = find_initial_TSP_tour(TT, n_nodes)
     pushfirst!(tour, 1)
     push!(tour, n_nodes + 2)
@@ -153,7 +153,7 @@ function Change_initial(c::Vector{Int64})
 end
 
 function Generate_initial_population(mu::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64},
-    n_nodes::Int64, flying_range::Float64, penaltyR::Float64, penaltyM::Float64, sR::Int64, sL::Int64, 
+    n_nodes::Int64, flying_range::Float64, penaltyR::Float64, penaltyM::Float64, sR::Float64, sL::Float64, 
     initial_chrm::Vector{Int64}, problem_type::problem)
     t1 = time()
     Population = Chromosome[]
@@ -262,7 +262,7 @@ function objective_value(truck_route::Vector{Int64}, drone_route::Vector{Int64},
 end
 
 function Diversify(Population::Vector{Chromosome}, mu::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64},
-    n_nodes::Int64, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64, penaltyM::Float64, 
+    n_nodes::Int64, flying_range::Float64, sR::Float64, sL::Float64, penaltyR::Float64, penaltyM::Float64, 
     initial_chrm::Vector{Int64}, problem_type::problem)
     # chrm = Build_Initial_chromosome(TT, DD, n_nodes, flying_range, sR, sL)
     chrm = initial_chrm

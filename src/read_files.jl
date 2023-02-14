@@ -1,3 +1,5 @@
+using DelimitedFiles
+
 function Calculate_distance_matrices_Agatz(alpha::Float64, depot::Tuple{Float64, Float64}, Nodes::Vector{Tuple{Float64, Float64}})
     num_of_nodes = length(Nodes)
     D = zeros(num_of_nodes,num_of_nodes)
@@ -84,21 +86,79 @@ function read_data_Bogyrbayeva(file_name::String, sample_number::Int)
     return depot, customers
 end
 
-using TSPLIB
 
-function Read_TSPLIB_instance(sample_name::Symbol)
-    tsp = readTSPLIB(sample_name)
-    allNodes = tsp.nodes
-    num_of_nodes = size(allNodes)[1] - 1
+function read_Murray(file_name::String)
+    n_nodes = 10
+    curdir = pwd()
+    filename = joinpath(curdir, "Test_instances/FSTSP-Instances-Murray/FSTSP_10_customer_problems/$(file_name)/tau.csv")
+    T = readdlm(filename, header = false, ',')
+    filename = joinpath(curdir, "Test_instances/FSTSP-Instances-Murray/FSTSP_10_customer_problems/$(file_name)/tauprime.csv")
+    D = readdlm(filename, header = false, ',')
+    TT = zeros(n_nodes+2, n_nodes+2)
+    DD = zeros(n_nodes+2, n_nodes+2)
+    for i=1:n_nodes+2
+        for j=1:n_nodes+2
+            if i == n_nodes+2
+                TT[i,j] = T[1,j]
+                DD[i,j] = D[1,j]
+            else
+                TT[i,j] = T[i,j]
+                DD[i,j] = D[i,j]
+            end
+        end
+    end
+    filename = joinpath(curdir, "Test_instances/FSTSP-Instances-Murray/FSTSP_10_customer_problems/$(file_name)/nodes.csv")
+    d = readdlm(filename, header = false, ',')
     dEligible = Int[]
-    for i in 1:num_of_nodes
-        r = 0.85 + 0.05 * rand()
-        if rand() > r
+    for i=0:10
+        if d[i+1, 4] == 1
             push!(dEligible, i)
         end
     end
-    depot = allNodes[1, :]
-    Customers = allNodes[2:num_of_nodes+1, :]
-    
-    return depot, Customers, dEligible
+    return TT, DD, dEligible
 end
+
+function read_data_Ha(file_name::String)
+    curdir = pwd()
+    filename = joinpath(curdir, "Test_instances/FSTSP-Instances-Ha/$(file_name).txt")
+    f = open(filename, "r")
+    lines = readlines(f)
+    n_nodes = parse(Int, split(lines[1]," ")[2])
+    tspeed = parse(Float64, split(lines[5]," ")[2]) / 60
+    dspeed = parse(Float64, split(lines[4]," ")[2]) / 60 
+    flying_range = 20.0
+    sL = 1.0
+    sR = 1.0
+    # flying_range = parse(Float64, split(lines[7]," ")[2]) * 60
+    # sL = parse(Float64, split(lines[9]," ")[2]) * 60
+    # sR = parse(Float64, split(lines[10]," ")[2]) * 60 
+    depot = parse.(Float64, split(lines[19]," ")[[2,3]])
+    customers = zeros(n_nodes, 2)
+    dEligible = Int[]
+    for i = 1:n_nodes
+        customers[i, :] = parse.(Float64, split(lines[19+i]," ")[[2,3]])
+        if parse(Int, split(lines[19+i]," ")[4]) == 1
+            push!(dEligible, i)
+        end
+    end
+    return depot, customers, dEligible, tspeed, dspeed, flying_range, sL, sR
+end
+
+# using TSPLIB
+
+# function Read_TSPLIB_instance(sample_name::Symbol)
+#     tsp = readTSPLIB(sample_name)
+#     allNodes = tsp.nodes
+#     num_of_nodes = size(allNodes)[1] - 1
+#     dEligible = Int[]
+#     for i in 1:num_of_nodes
+#         r = 0.85 + 0.05 * rand()
+#         if rand() > r
+#             push!(dEligible, i)
+#         end
+#     end
+#     depot = allNodes[1, :]
+#     Customers = allNodes[2:num_of_nodes+1, :]
+    
+#     return depot, Customers, dEligible
+# end

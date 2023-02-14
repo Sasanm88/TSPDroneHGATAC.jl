@@ -377,7 +377,7 @@ function NLO11(chrm::Chromosome, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{I
     # llc = copy(chrm.LLnodes)
     tnodes_loc = findall(x -> x > 0, c)
     dnodes_loc = findall(x -> x < 0, c)
-    if length(dnodes_loc) == 0 || length(chrm.LLnodes) == 0
+    if length(dnodes_loc) == 0 || length(chrm.LLnodes) < 2
         return c
     end
     dnode_idx = rand(1:length(dnodes_loc))
@@ -429,7 +429,7 @@ function NLO12(chrm::Chromosome, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{I
     # llc = copy(chrm.LLnodes)
     # tnodes_loc = findall(x->x>0,c)
     dnodes_loc = findall(x -> x < 0, c)
-    if length(dnodes_loc) == 0 || length(chrm.LLnodes) == 0
+    if length(dnodes_loc) == 0 || length(chrm.LLnodes) < 2
         return c
     end
     dnode_idx = rand(1:length(dnodes_loc))
@@ -472,7 +472,7 @@ function NLO13(chrm::Chromosome, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{I
     # llc = copy(chrm.LLnodes)
     # tnodes_loc = findall(x->x>0,c)
     dnodes_loc = findall(x -> x < 0, c)
-    if length(dnodes_loc) == 0 || length(chrm.LLnodes) == 0
+    if length(dnodes_loc) == 0 || length(chrm.LLnodes) < 2
         return c
     end
     dnode_idx = rand(1:length(dnodes_loc))
@@ -513,7 +513,7 @@ function NLO14(chrm::Chromosome, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{I
     # llc = copy(chrm.LLnodes)
     # tnodes_loc = findall(x->x>0,c)
     dnodes_loc = findall(x -> x < 0, c)
-    if length(dnodes_loc) == 0 || length(chrm.LLnodes) == 0
+    if length(dnodes_loc) == 0 || length(chrm.LLnodes) < 2
         return c
     end
     dnode_idx = rand(1:length(dnodes_loc))
@@ -853,7 +853,7 @@ end
 
 
 function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64},
-    ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Int64, sL::Int64, penaltyR::Float64,
+    ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Float64, sL::Float64, penaltyR::Float64,
     penaltyM::Float64, problem_type::problem, turn::Int64)
 
     bestF = 0
