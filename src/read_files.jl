@@ -1,4 +1,5 @@
 using DelimitedFiles
+using TSPLIB
 
 function Calculate_distance_matrices_Agatz(alpha::Float64, depot::Tuple{Float64, Float64}, Nodes::Vector{Tuple{Float64, Float64}})
     num_of_nodes = length(Nodes)
@@ -144,21 +145,19 @@ function read_data_Ha(file_name::String)
     return depot, customers, dEligible, tspeed, dspeed, flying_range, sL, sR
 end
 
-# using TSPLIB
-
-# function Read_TSPLIB_instance(sample_name::Symbol)
-#     tsp = readTSPLIB(sample_name)
-#     allNodes = tsp.nodes
-#     num_of_nodes = size(allNodes)[1] - 1
-#     dEligible = Int[]
-#     for i in 1:num_of_nodes
-#         r = 0.85 + 0.05 * rand()
-#         if rand() > r
-#             push!(dEligible, i)
-#         end
-#     end
-#     depot = allNodes[1, :]
-#     Customers = allNodes[2:num_of_nodes+1, :]
+function Read_TSPLIB_instance(sample_name::Symbol)
+    tsp = readTSPLIB(sample_name)
+    allNodes = tsp.nodes
+    num_of_nodes = size(allNodes)[1] - 1
+    dEligible = Int[]
+    for i in 1:num_of_nodes
+        r = 0.85 + 0.05 * rand()
+        if rand() > r
+            push!(dEligible, i)
+        end
+    end
+    depot = allNodes[1, :]
+    Customers = allNodes[2:num_of_nodes+1, :]
     
-#     return depot, Customers, dEligible
-# end
+    return depot, Customers, dEligible
+end

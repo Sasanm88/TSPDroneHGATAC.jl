@@ -1,8 +1,4 @@
 
-include("../src/main.jl")
-
-
-
 function Solve_Agatz_unrestricted(sample::String, num_runs::Int64)
     T, D = read_data_Agatz(sample)
     return solve_tspd_by_HGA_TAC(TSPD, num_runs, T, D)
@@ -36,5 +32,5 @@ function Solve_TSPLIB(file_name::Symbol, drone_not_eligible::Vector{Int}, flying
     flying_range = flying_range, sR = sR, sL = sL)
 end
 
-Solve_TSPLIB(:berlin52, Int[], 40.0, 40.0, 40.0, 1.0, 1.0, 5)
+
 
