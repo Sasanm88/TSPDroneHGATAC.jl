@@ -35,8 +35,7 @@ end
 
 function read_data_Agatz(sample::String)
     distribution = split(sample, "-")[1]
-    curdir = pwd()
-    filename = joinpath(curdir, "Test_instances/TSPD-Instances-Agatz/$(distribution)/$(sample).txt")
+    filename = joinpath(@__DIR__, "Test_instances/TSPD-Instances-Agatz/$(distribution)/$(sample).txt")
     f = open(filename, "r")
     lines = readlines(f)
 
@@ -53,8 +52,7 @@ function read_data_Agatz(sample::String)
 end
 
 function read_data_Agatz_restricted(sample::String)
-    curdir = pwd()
-    filename = joinpath(curdir, "Test_instances/TSPD-Instances-Agatz/restricted/maxradius/$(sample).txt")
+    filename = joinpath(@__DIR__, "Test_instances/TSPD-Instances-Agatz/restricted/maxradius/$(sample).txt")
     f = open(filename, "r")
     lines = readlines(f)
     flying_range = parse(Float64, split(lines[1], " ")[2])
@@ -73,8 +71,7 @@ end
 function read_data_Bogyrbayeva(file_name::String, sample_number::Int)
     distribution, _, n_nodes_ = split(file_name, "-")
     n_nodes = parse(Int, n_nodes_)
-    curdir = pwd()
-    filename = joinpath(curdir, "Test_instances/TSPD-Instances-Bogyrbayeva/$(distribution)/$(file_name).txt")
+    filename = joinpath(@__DIR__, "Test_instances/TSPD-Instances-Bogyrbayeva/$(distribution)/$(file_name).txt")
     f = open(filename, "r")
     lines = readlines(f)
     data = parse.(Float64, split(lines[sample_number], " "))
@@ -90,10 +87,9 @@ end
 
 function read_Murray(file_name::String)
     n_nodes = 10
-    curdir = pwd()
-    filename = joinpath(curdir, "Test_instances/FSTSP-Instances-Murray/FSTSP_10_customer_problems/$(file_name)/tau.csv")
+    filename = joinpath(@__DIR__, "Test_instances/FSTSP-Instances-Murray/FSTSP_10_customer_problems/$(file_name)/tau.csv")
     T = readdlm(filename, header=false, ',')
-    filename = joinpath(curdir, "Test_instances/FSTSP-Instances-Murray/FSTSP_10_customer_problems/$(file_name)/tauprime.csv")
+    filename = joinpath(@__DIR__, "Test_instances/FSTSP-Instances-Murray/FSTSP_10_customer_problems/$(file_name)/tauprime.csv")
     D = readdlm(filename, header=false, ',')
     TT = zeros(n_nodes + 2, n_nodes + 2)
     DD = zeros(n_nodes + 2, n_nodes + 2)
@@ -120,8 +116,7 @@ function read_Murray(file_name::String)
 end
 
 function read_data_Ha(file_name::String)
-    curdir = pwd()
-    filename = joinpath(curdir, "Test_instances/FSTSP-Instances-Ha/$(file_name).txt")
+    filename = joinpath(@__DIR__, "Test_instances/FSTSP-Instances-Ha/$(file_name).txt")
     f = open(filename, "r")
     lines = readlines(f)
     n_nodes = parse(Int, split(lines[1], " ")[2])
