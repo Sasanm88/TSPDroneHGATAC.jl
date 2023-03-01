@@ -1,9 +1,11 @@
 include("../src/main.jl")
+
+include("read_files.jl")
 include("test_instances.jl")
 
 
-Solve_Agatz_unrestricted("uniform-alpha_1-75-n50", 10)   # 10 test runs
-Solve_Agatz_restricted("uniform-62-n20-maxradius-20", 10)  # 10 test runs
+# Solve_Agatz_unrestricted("uniform-alpha_1-75-n50", 10)   # 10 test runs
+# Solve_Agatz_restricted("uniform-62-n20-maxradius-20", 10)  # 10 test runs
 Solve_Bogyrbayeva("Amsterdam-n_nodes-50", 1, 10)  # instance number 1, 10 test runs
 Solve_Murray("20140810T123437v1", 20.0, 10) # flying_range = 20, 10 test runs
 Solve_Ha("mbA101", 10) # 10 test runs
