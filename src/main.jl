@@ -44,9 +44,9 @@ function solve_tspd(
         flying_range=flying_range
     )
 
-    @assert length(result) == 1
+    @assert length(result) == num_runs
     
-    return result[1]
+    return result
 
 end
 
@@ -78,9 +78,9 @@ function solve_tspd(
         flying_range=flying_range
     )
 
-    @assert length(result) == 1
+    @assert length(result) == num_runs
     
-    return result[1]
+    return result
 
 end
 

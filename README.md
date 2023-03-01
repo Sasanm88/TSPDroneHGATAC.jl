@@ -27,7 +27,7 @@ import Pkg; Pkg.add("https://github.com/chkwon/TSPDrone.jl")
 using TSPDrone
 result2 = TSPDrone.solve_tspd(x, y, 1.0, 0.5)
 
-@show result1.total_cost
+@show result1[1].total_cost
 @show result2.total_cost
 ```
 
@@ -47,6 +47,6 @@ import Pkg; Pkg.add("https://github.com/chkwon/TSPDrone.jl")
 using TSPDrone
 result2 = TSPDrone.solve_tspd(truck_cost_mtx, drone_cost_mtx)
 
-@show result1.total_cost
+@show result1[1].total_cost
 @show result2.total_cost
 ```
