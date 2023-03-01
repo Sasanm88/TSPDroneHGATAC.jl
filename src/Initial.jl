@@ -153,8 +153,8 @@ function Change_initial(c::Vector{Int64})
 end
 
 function Generate_initial_population(mu::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64},
-    n_nodes::Int64, flying_range::Float64, penaltyR::Float64, penaltyM::Float64, sR::Float64, sL::Float64, 
-    initial_chrm::Vector{Int64}, problem_type::problem)
+    n_nodes::Int64, flying_range::Float64, penaltyR::Float64, penaltyM::Float64, sR::Float64, sL::Float64,
+    initial_chrm::Vector{Int64}, problem_type::ProblemType)
     t1 = time()
     Population = Chromosome[]
     # chrm = Build_Initial_chromosome(TT, DD, n_nodes, flying_range, sR, sL)
@@ -164,7 +164,7 @@ function Generate_initial_population(mu::Int64, TT::Matrix{Float64}, DD::Matrix{
     count_f = 1
     count_infR = 0
     count_infM = 0
-    if flying_range == Inf 
+    if flying_range == Inf
         count_infR = mu
     end
     while true
@@ -262,8 +262,8 @@ function objective_value(truck_route::Vector{Int64}, drone_route::Vector{Int64},
 end
 
 function Diversify(Population::Vector{Chromosome}, mu::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64},
-    n_nodes::Int64, flying_range::Float64, sR::Float64, sL::Float64, penaltyR::Float64, penaltyM::Float64, 
-    initial_chrm::Vector{Int64}, problem_type::problem)
+    n_nodes::Int64, flying_range::Float64, sR::Float64, sL::Float64, penaltyR::Float64, penaltyM::Float64,
+    initial_chrm::Vector{Int64}, problem_type::ProblemType)
     # chrm = Build_Initial_chromosome(TT, DD, n_nodes, flying_range, sR, sL)
     chrm = initial_chrm
     n_best = Int(round(0.3 * mu))

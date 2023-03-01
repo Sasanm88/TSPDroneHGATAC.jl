@@ -1,4 +1,4 @@
-@enum problem begin
+@enum ProblemType begin
     TSPD
     FSTSP
 end
@@ -88,7 +88,7 @@ mutable struct Dr_node    #Not required for unlimited TSPD
     Ttimes::Matrix{Float64}
 end
 
-function find_beforeANDafter_nodes(c::Vector{Int64}, TT::Matrix{Float64}, problem_type::problem)   #Not required for unlimited TSPD
+function find_beforeANDafter_nodes(c::Vector{Int64}, TT::Matrix{Float64}, problem_type::ProblemType)   #Not required for unlimited TSPD
     n_nodes = length(c)
     DrNodes = Vector{Dr_node}()
     dnodes_loc = findall(x -> x < 0, c)
@@ -149,7 +149,7 @@ function find_beforeANDafter_nodes(c::Vector{Int64}, TT::Matrix{Float64}, proble
 end
 
 function Is_feasibleR(c::Vector{Int64}, DD::Matrix{Float64}, TT::Matrix{Float64}, dEligible::Vector{Int64},
-     flying_range::Float64, sR::Float64, sL::Float64, problem_type::problem)   #Not required for unlimited TSPD
+     flying_range::Float64, sR::Float64, sL::Float64, problem_type::ProblemType)   #Not required for unlimited TSPD
     
     violating_nodes = Vector{Int64}()
     if flying_range == Inf        #For some problems, flying_range is not Inf but technically is. We should manually take care of this

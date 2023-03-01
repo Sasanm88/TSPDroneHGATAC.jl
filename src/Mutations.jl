@@ -1,7 +1,7 @@
 
 function sign_mutation(cr::Vector{Int64})
     c = copy(cr)
-    @inbounds for i = 1:length(c)
+    @inbounds for i in eachindex(c)
         if rand() < 0.1
             c[i] = -c[i]
         end

@@ -1,9 +1,9 @@
 using Distances
 
-function Calculate_duration_matrices(tspeed::Float64, dspeed::Float64, depot::Vector{Float64}, Customers::Matrix{Float64}, problem_type::problem)
+function Calculate_duration_matrices(tspeed::Float64, dspeed::Float64, depot::Vector{Float64}, Customers::Matrix{Float64}, problem_type::ProblemType)
     # This function is used when the input are the node coordinates and the speed of vehicles.
     # It takes the input and returns the matrices that include travel times for each vehicle between nodes
-    num_of_nodes = size(Customers)[1] 
+    num_of_nodes = size(Customers)[1]
     D = Matrix{Float64}(undef, num_of_nodes + 2, num_of_nodes + 2)
     T = Matrix{Float64}(undef, num_of_nodes + 2, num_of_nodes + 2)
     D[1, 1] = 0.0

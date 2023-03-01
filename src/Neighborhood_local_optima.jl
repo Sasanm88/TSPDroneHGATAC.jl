@@ -854,7 +854,7 @@ end
 
 function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64},
     ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Float64, sL::Float64, penaltyR::Float64,
-    penaltyM::Float64, problem_type::problem, turn::Int64)
+    penaltyM::Float64, problem_type::ProblemType, turn::Int64)
 
     bestF = 0
     bestR = 0
@@ -881,13 +881,13 @@ function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matr
                 break
             end
         end
-        
+
         chrmR = deepcopy(P[bestR])
-        
-    
+
+
         push!(substituesR, chrmR)
         push!(fsR, chrmR.fitness)
-        
+
         best_fR = chrmR.fitness
     end
 
@@ -895,11 +895,11 @@ function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matr
     allowed_diff = 0.05
 
     methods = [NLO1, NLO2, NLO3, NLO4, NLO5, NLO6, NLO7, NLO8, NLO9, NLO10, NLO11, NLO12, NLO13, NLO14, NLO15, NLO16, NLO17, NLO18, NLO19, NLO20, NLO21, NLO22, NLO23, NLO24]
-    
 
-    
 
-    @inbounds for i = 1:30000 * turn
+
+
+    @inbounds for i = 1:30000*turn
         chrmF = substituesF[rand(1:length(substituesF))]
         r = 0
         r = rand(1:length(methods))
@@ -966,8 +966,8 @@ function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matr
             end
         end
     end
-    if flying_range<Inf
-        @inbounds for i = 1:10000 * turn
+    if flying_range < Inf
+        @inbounds for i = 1:10000*turn
             chrmR = substituesR[rand(1:length(substituesR))]
             r = 0
             r = rand(1:length(methods))
