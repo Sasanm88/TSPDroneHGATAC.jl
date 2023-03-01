@@ -353,8 +353,6 @@ function run_GA(problem_type::ProblemType, num_runs::Int64, T::Matrix{Float64}, 
 
     end
 
-    println()
-
     return Routes
 end
 
