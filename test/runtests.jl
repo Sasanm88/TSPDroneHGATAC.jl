@@ -1,4 +1,6 @@
-include("../src/main.jl")
+# include("../src/main.jl")
+
+using TSPDroneHGATAC
 
 include("read_files.jl")
 include("test_instances.jl")
