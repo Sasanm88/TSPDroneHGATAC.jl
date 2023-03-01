@@ -7,7 +7,7 @@ A package that uses Hybrid Genetic Algorithm to solve any TSPD or FSTSP instance
 
 To install:
 ```julia
-import Pkg; Pkg.add("https://github.com/Sasanm88/TSPDroneHGATAC.jl")
+import Pkg; Pkg.add(url="https://github.com/Sasanm88/TSPDroneHGATAC.jl")
 ```
 or
 ```julia
@@ -24,7 +24,7 @@ x = rand(n); y = rand(n);
 
 result1 = TSPDroneHGATAC.solve_tspd(x, y, 1.0, 0.5)
 
-import Pkg; Pkg.add("https://github.com/chkwon/TSPDrone.jl")
+import Pkg; Pkg.add(url="https://github.com/chkwon/TSPDrone.jl")
 using TSPDrone
 result2 = TSPDrone.solve_tspd(x, y, 1.0, 0.5)
 
@@ -44,7 +44,7 @@ drone_cost_mtx = truck_cost_mtx .* 0.5
 
 result1 = TSPDroneHGATAC.solve_tspd(truck_cost_mtx, drone_cost_mtx)
 
-import Pkg; Pkg.add("https://github.com/chkwon/TSPDrone.jl")
+import Pkg; Pkg.add(url="https://github.com/chkwon/TSPDrone.jl")
 using TSPDrone
 result2 = TSPDrone.solve_tspd(truck_cost_mtx, drone_cost_mtx)
 
