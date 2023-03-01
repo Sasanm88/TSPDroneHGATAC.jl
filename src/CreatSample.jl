@@ -1,4 +1,3 @@
-using Distances
 
 function Calculate_duration_matrices(tspeed::Float64, dspeed::Float64, depot::Vector{Float64}, Customers::Matrix{Float64}, problem_type::ProblemType)
     # This function is used when the input are the node coordinates and the speed of vehicles.

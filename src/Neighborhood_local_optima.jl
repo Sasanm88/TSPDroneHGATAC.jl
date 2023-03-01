@@ -1,4 +1,3 @@
-using StatsBase
 
 function find_two_consecutive_truck_nodes_NF(c::Vector{Int64})  #finds the start points, the ones that can be removed without making infeasible
     # TODO: change the type

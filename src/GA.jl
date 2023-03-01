@@ -1,4 +1,3 @@
-# using StatsBase
 
 function Creat_Random_Cromosome(n_nodes::Int64)
     chromosome = shuffle!([i for i = 1:n_nodes])

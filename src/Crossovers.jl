@@ -1,4 +1,3 @@
-using StatsBase
 
 function Crossover_DX1(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::Int64)
     child = zeros(Int64, n_nodes)

@@ -1,4 +1,3 @@
-using StatsBase
 
 function N1(chrm::Chromosome, n_nodes::Int64, TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, flying_range::Float64, sR::Float64, sL::Float64, penaltyR::Float64, penaltyM::Float64, problem_type::ProblemType)   #choose one free truck node and puts it randomly in truck tour     #OK
     c = copy(chrm.genes)

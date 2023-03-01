@@ -1,5 +1,4 @@
-using LKH
-using Shuffle
+
 
 function convert_TSPtour_to_chromosome(tsp_tour::Vector{Int64}, n_nodes::Int64)
     chrm = Vector{Int}()
