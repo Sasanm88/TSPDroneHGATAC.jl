@@ -3,7 +3,7 @@ module TSPDroneHGATAC
 include("main.jl")
 
 export 
-    solve_tspd_by_HGA_TAC,
+    solve_tspd,
     ProblemType,
     TSPD,
     FSTSP
