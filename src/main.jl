@@ -22,16 +22,26 @@ function solve_tspd(
     num_runs::Int64=1,
     flying_range::Float64=Inf,
 )
+
+    @assert size(truck_cost_mtx) == size(drone_cost_mtx)
+
+    # check the diagonal elements are all zero
+    for i in 1:size(truck_cost_mtx)[1]
+        @assert truck_cost_mtx[i, i] == 0.0
+        @assert drone_cost_mtx[i, i] == 0.0
+    end
+    
+
     # the size of truck_cost_mtx and drone_cost_mtx is (n_customers + 1) x (n_customers + 1)
     # the first row and column are the depot
 
-    # What need to be T and D? Shouldn't each of T and D be Ct and Cd?
-    Ct = [
+    # What need to be T and D? Shouldn't each of T and D as follows?
+    T = [
         truck_cost_mtx          truck_cost_mtx[:, 1];
         truck_cost_mtx[1, :]'    0.0
     ]
 
-    Cd = [
+    D = [
         drone_cost_mtx          drone_cost_mtx[:, 1];
         drone_cost_mtx[1, :]'    0.0
     ]
@@ -39,8 +49,8 @@ function solve_tspd(
     result = solve_tspd_by_HGA_TAC(
         TSPD, 
         num_runs, 
-        Ct, 
-        Cd, 
+        T, 
+        D, 
         flying_range=flying_range
     )
 
@@ -99,6 +109,7 @@ function solve_tspd_by_HGA_TAC(problem_type::ProblemType, num_runs::Int64, depot
     T, D = Calculate_duration_matrices(tspeed, dspeed, depot, Customers, problem_type)
 
     @show size(T), size(D)
+    @show T
     return run_GA(problem_type, num_runs, T, D, flying_range, sR, sL, drone_not_Eligible)
 end
 

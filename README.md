@@ -39,13 +39,15 @@ result2 = TSPDrone.solve_tspd(x, y, 1.0, 0.5)
 @show result2.total_cost
 ```
 
-
-The below makes an error.... 
+Another way...
 ```julia
 using TSPDroneHGATAC
 n = 10 
 dist_mtx = rand(n, n)
 dist_mtx = dist_mtx + dist_mtx' # symmetric distance only
+for i in 1:n # diagonal needs to be zero
+    dist_mtx[i, i] = 0.0
+end
 truck_cost_mtx = dist_mtx .* 1.0
 drone_cost_mtx = truck_cost_mtx .* 0.5 
 
