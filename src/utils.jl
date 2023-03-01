@@ -15,7 +15,7 @@ end
 mutable struct TSPD_Route
     Truck_Route::Vector{Int}
     Drone_Route::Vector{Int}
-    Cmax::Float64
+    total_cost::Float64
     run_time::Float64
 end
 
@@ -248,7 +248,7 @@ function Return_best_route(Population::Vector{Chromosome})
         end
     end
     push!(Best_Route.Truck_Route, 0)
-    Best_Route.Cmax = chrm.fitness
+    Best_Route.total_cost = chrm.fitness
 
     if length(chrm.Real_LLnodes) == 0
         return Best_Route
