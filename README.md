@@ -1,5 +1,6 @@
 # TSPDroneHGATAC.jl
 
+
 A package that uses Hybrid Genetic Algorithm to solve any TSPD or FSTSP instance
 
 # Installation
@@ -50,3 +51,29 @@ result2 = TSPDrone.solve_tspd(truck_cost_mtx, drone_cost_mtx)
 @show result1.total_cost
 @show result2.total_cost
 ```
+
+
+## Internal Solver Functions
+
+This is a package that uses Hybrid Genetic Algorithm to solve any TSPD or FSTSP instance. 
+The main function that can be utilized by the user is "solve_tspd_by_HGA_TAC". 
+This function can take two different set of arguments. 
+
+```julia
+solve_tspd_by_HGA_TAC(problem_type::ProblemType, num_runs::Int64, T::Matrix{Float64}, D::Matrix{Float64};
+    drone_not_Eligible::Vector{Int} = Int[], flying_range::Float64 = Inf, sR::Float64 = 0.0, sL::Float64 = 0.0)
+```
+
+and
+
+```julia
+solve_tspd_by_HGA_TAC(problem_type::ProblemType, num_runs::Int64, depot::Vector{Float64}, 
+    Customers::Matrix{Float64}, tspeed::Float64, dspeed::Float64; drone_not_Eligible::Vector{Int} = Int[],
+    flying_range::Float64 = Inf, sR::Float64 = 0.0, sL::Float64 = 0.0)
+```    
+
+* `problem_type` is an argument that takes either `TSPD` or `FSTSP`. 
+* `num_runs` is the number of times that user wants the algorithm to solve the required problem. The output will be a vector of size `num_runs`. 
+
+
+
