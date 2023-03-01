@@ -14,6 +14,13 @@ or
 ] add https://github.com/Sasanm88/TSPDroneHGATAC.jl
 ```
 
+
+To install `TSPDrone.jl`:
+```julia
+] add https://github.com/chkwon/TSPDrone.jl
+```
+
+
 ## Examples 
 
 This works....
@@ -24,7 +31,7 @@ x = rand(n); y = rand(n);
 
 result1 = TSPDroneHGATAC.solve_tspd(x, y, 1.0, 0.5)
 
-import Pkg; Pkg.add(url="https://github.com/chkwon/TSPDrone.jl")
+# compare with TSPDrone.jl
 using TSPDrone
 result2 = TSPDrone.solve_tspd(x, y, 1.0, 0.5)
 
@@ -44,7 +51,7 @@ drone_cost_mtx = truck_cost_mtx .* 0.5
 
 result1 = TSPDroneHGATAC.solve_tspd(truck_cost_mtx, drone_cost_mtx)
 
-import Pkg; Pkg.add(url="https://github.com/chkwon/TSPDrone.jl")
+# compare with TSPDrone.jl
 using TSPDrone
 result2 = TSPDrone.solve_tspd(truck_cost_mtx, drone_cost_mtx)
 
