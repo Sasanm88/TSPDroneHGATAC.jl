@@ -1,4 +1,3 @@
-# using StatsBase
 
 function Creat_Random_Cromosome(n_nodes::Int64)
     chromosome = shuffle!([i for i = 1:n_nodes])
@@ -20,19 +19,19 @@ function Select_parents(Population::Vector{Chromosome}, k_tournament::Int64, pop
     return Parent_Selection_TS(Population, k_tournament, popsize), Parent_Selection_TS(Population, k_tournament, popsize)
 end
 
-function Reproduce(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::Int64) 
+function Reproduce(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::Int64)
     r = rand(1:5)
 
     if r == 1
-        return Crossover_OX1(parent1, parent2, n_nodes)  
+        return Crossover_OX1(parent1, parent2, n_nodes)
     elseif r == 2
-        return Crossover_OX2(parent1, parent2, n_nodes)  
+        return Crossover_OX2(parent1, parent2, n_nodes)
     elseif r == 3
-        return Crossover_DX1(parent1, parent2, n_nodes)  
+        return Crossover_DX1(parent1, parent2, n_nodes)
     elseif r == 4
-        return Crossover_DX2(parent1, parent2, n_nodes)  
+        return Crossover_DX2(parent1, parent2, n_nodes)
     else
-        return Crossover_DX3(parent1, parent2, n_nodes)   
+        return Crossover_DX3(parent1, parent2, n_nodes)
     end
 end
 
@@ -86,7 +85,7 @@ end
 function process_child(Population::Vector{Chromosome}, child::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{Float64},
     dEligible::Vector{Int64}, flying_range::Float64, penaltyR::Float64, penaltyM::Float64, fractionFeasibleLoad::Float64,
     fractionInFeasibleRLoad::Float64, feas_count::Int64, InfR_count::Int64, InfM_count::Int64, sR::Float64, sL::Float64,
-     ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, problem_type::problem)
+    ClosenessT::Matrix{Int64}, ClosenessD::Matrix{Int64}, problem_type::ProblemType)
     n_nodes = length(child)
     if Is_feasibleM(child)
         violating_drones = Is_feasibleR(child, DD, TT, dEligible, flying_range, sR, sL, problem_type)
@@ -216,7 +215,7 @@ function Perform_Survival_plan(Population::Vector{Chromosome}, mu::Int64, sigma:
 end
 
 function Adjust_penalties(fractionFeasibleLoad::Float64, fractionInFeasibleRLoad::Float64, penaltyM::Float64,
-     penaltyR::Float64, targetFeasible::Float64, flying_range::Float64)
+    penaltyR::Float64, targetFeasible::Float64, flying_range::Float64)
     if fractionFeasibleLoad < targetFeasible - 0.05
         if fractionInFeasibleRLoad < 1 - fractionFeasibleLoad - fractionInFeasibleRLoad
             penaltyM = min(penaltyM * 1.1, 8)
@@ -242,7 +241,7 @@ function Generate_new_generation(TT::Matrix{Float64}, DD::Matrix{Float64}, dElig
     popsize::Tuple{Int64,Int64}, k_tournament::Int64, targetFeasible::Float64, sR::Float64, sL::Float64, ClosenessT::Matrix{Int64},
     ClosenessD::Matrix{Int64}, initial_chrm::Vector{Int64}, Gen_num::Int64, feas_count::Int64, InfR_count::Int64, InfM_count::Int64,
     penaltyR::Float64, penaltyM::Float64, old_best::Float64, fractionFeasibleLoad::Float64, fractionInFeasibleRLoad::Float64,
-    Population::Vector{Chromosome}, improve_count::Int64, problem_type::problem)
+    Population::Vector{Chromosome}, improve_count::Int64, problem_type::ProblemType)
     t1 = time()
 
     mu, sigma = popsize
@@ -262,14 +261,14 @@ function Generate_new_generation(TT::Matrix{Float64}, DD::Matrix{Float64}, dElig
     child = Reproduce(parent1.genes, parent2.genes, n_nodes)
     child = mutate(child)
 
-    fractionFeasibleLoad, fractionInFeasibleRLoad, feas_count, InfR_count, InfM_count = 
-    process_child(Population, child, TT, DD, dEligible, flying_range, penaltyR, penaltyM, 
-    fractionFeasibleLoad, fractionInFeasibleRLoad, feas_count, InfR_count, InfM_count, sR, sL, ClosenessT, ClosenessD, problem_type)
+    fractionFeasibleLoad, fractionInFeasibleRLoad, feas_count, InfR_count, InfM_count =
+        process_child(Population, child, TT, DD, dEligible, flying_range, penaltyR, penaltyM,
+            fractionFeasibleLoad, fractionInFeasibleRLoad, feas_count, InfR_count, InfM_count, sR, sL, ClosenessT, ClosenessD, problem_type)
 
     sort!(Population, by=x -> x.fitness)
     if improve_count % 999 == 0
-        Scape_local_optima(Population, TT, DD, dEligible, ClosenessT, ClosenessD, flying_range, 
-        sR, sL, penaltyR, penaltyM, problem_type, Int(round(improve_count / 999)))
+        Scape_local_optima(Population, TT, DD, dEligible, ClosenessT, ClosenessD, flying_range,
+            sR, sL, penaltyR, penaltyM, problem_type, Int(round(improve_count / 999)))
     end
     feas_count, InfR_count, InfM_count = Perform_Survival_plan(Population, mu, sigma, feas_count, InfR_count, InfM_count)
 
@@ -292,7 +291,7 @@ end
 
 
 function Perform_Genetic_Algorithm(TT::Matrix{Float64}, DD::Matrix{Float64}, dEligible::Vector{Int64}, h::Float64, popsize::Tuple{Int64,Int64},
-    k_tournament::Int64, targetFeasible::Float64, sR::Float64, sL::Float64, num_iter::Int64, flying_range::Float64, initial_chrm::Vector{Int64}, problem_type::problem)
+    k_tournament::Int64, targetFeasible::Float64, sR::Float64, sL::Float64, num_iter::Int64, flying_range::Float64, initial_chrm::Vector{Int64}, problem_type::ProblemType)
     n_nodes = size(TT)[1] - 2
     t1 = time()
     ClosenessT, ClosenessD = Find_Closeness(TT, DD, h)
@@ -325,14 +324,14 @@ function Perform_Genetic_Algorithm(TT::Matrix{Float64}, DD::Matrix{Float64}, dEl
 end
 
 
-function run_GA(problem_type::problem, num_runs::Int64, T::Matrix{Float64}, D::Matrix{Float64},
+function run_GA(problem_type::ProblemType, num_runs::Int64, T::Matrix{Float64}, D::Matrix{Float64},
     flying_range::Float64, sR::Float64, sL::Float64, drone_not_Eligible::Vector{Int})
 
     n_nodes = size(T)[1] - 2
-    if flying_range >= maximum(sum(sort(D, dims=2, rev=true)[:,1:2], dims = 2))
+    if flying_range >= maximum(sum(sort(D, dims=2, rev=true)[:, 1:2], dims=2))
         flying_range = Inf
     end
-     #GA Parameters
+    #GA Parameters
     popsize = (15, 25)  #(mu,sigma)
     k_tournament = 5
     targetFeasible = 0.2
@@ -345,16 +344,14 @@ function run_GA(problem_type::problem, num_runs::Int64, T::Matrix{Float64}, D::M
         initial_chrm = Build_Initial_chromosome(T, D, n_nodes, flying_range, sR, sL)
         t1 = time()
         println("Run ", i, ":")
-        P = Perform_Genetic_Algorithm(T, D, drone_not_Eligible, h, popsize, k_tournament, targetFeasible, sR, sL, 
-        num_generations, flying_range, initial_chrm, problem_type)
+        P = Perform_Genetic_Algorithm(T, D, drone_not_Eligible, h, popsize, k_tournament, targetFeasible, sR, sL,
+            num_generations, flying_range, initial_chrm, problem_type)
         t2 = time()
         Route = Return_best_route(P)
         Route.run_time = t2 - t1
         push!(Routes, Route)
 
     end
-
-    println()
 
     return Routes
 end

@@ -1,0 +1,21 @@
+name = "TSPDroneHGATAC"
+uuid = "bebbd67e-16f0-4a44-91e8-60fa31c6a335"
+authors = ["Changhyun Kwon <chkwon@gmail.com> and contributors"]
+version = "0.1.0"
+
+[deps]
+DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
+LKH = "294deba0-74fa-42c9-af84-c3834b01fefc"
+Shuffle = "bf21e494-c40e-4daa-abfb-de5ec0aad010"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+TSPLIB = "b1c258e7-59ae-4b06-a547-f10871db1548"
+
+[targets]
+test = ["Test", "TSPLIB"]
