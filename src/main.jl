@@ -34,8 +34,10 @@ function solve_tspd(
 
     # the size of truck_cost_mtx and drone_cost_mtx is (n_customers + 1) x (n_customers + 1)
     # the first row and column are the depot
+    # the rest of the rows and columns are the customers
 
-    # What need to be T and D? Shouldn't each of T and D as follows?
+    # we need to add the depot to the end of the cost matrix    
+
     T = [
         truck_cost_mtx          truck_cost_mtx[:, 1];
         truck_cost_mtx[1, :]'    0.0
@@ -46,7 +48,7 @@ function solve_tspd(
         drone_cost_mtx[1, :]'    0.0
     ]
 
-    result = solve_tspd_by_HGA_TAC(
+    routes = solve_tspd_by_HGA_TAC(
         TSPD, 
         num_runs, 
         T, 
@@ -54,8 +56,10 @@ function solve_tspd(
         flying_range=flying_range
     )
 
-    @assert length(result) == num_runs
+    @assert length(routes) == num_runs
     
+    result = prepare_return_value(routes)
+
     return result
 
 end
@@ -66,9 +70,9 @@ end
 # https://github.com/chkwon/TSPDrone.jl
 function solve_tspd(
     x::Vector{Float64}, 
-    y::Vector{Float64}, 
-    truck_cost_factor::Float64, 
-    drone_cost_factor::Float64;
+    y::Vector{Float64};
+    truck_cost_factor::Float64 = 1.0, 
+    drone_cost_factor::Float64 = 0.5
     num_runs::Int64=1,
     flying_range::Float64=Inf,
 )
@@ -78,7 +82,7 @@ function solve_tspd(
     depot = [x[1], y[1]]
     customers = [x[2:end] y[2:end]]
 
-    result = solve_tspd_by_HGA_TAC(
+    routes = solve_tspd_by_HGA_TAC(
         TSPD, 
         num_runs, 
         depot, 
@@ -88,12 +92,18 @@ function solve_tspd(
         flying_range=flying_range
     )
 
-    @assert length(result) == num_runs
+    @assert length(routes) == num_runs
+    
+    result = prepare_return_value(routes)
     
     return result
 
 end
 
+
+
+
+# Internal functions to run HGA_TAC
 
 function solve_tspd_by_HGA_TAC(problem_type::ProblemType, num_runs::Int64, T::Matrix{Float64}, D::Matrix{Float64};
     drone_not_Eligible::Vector{Int}=Int[], flying_range::Float64=Inf, sR::Float64=0.0, sL::Float64=0.0)

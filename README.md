@@ -33,9 +33,9 @@ result1 = TSPDroneHGATAC.solve_tspd(x, y, 1.0, 0.5)
 
 # compare with TSPDrone.jl
 using TSPDrone
-result2 = TSPDrone.solve_tspd(x, y, 1.0, 0.5)
+result2 = TSPDrone.solve_tspd(x, y, truck_cost_factor=1.0, drone_cost_factor=0.5)
 
-@show result1[1].total_cost
+@show result1.best_total_cost
 @show result2.total_cost
 ```
 
@@ -57,7 +57,7 @@ result1 = TSPDroneHGATAC.solve_tspd(truck_cost_mtx, drone_cost_mtx)
 using TSPDrone
 result2 = TSPDrone.solve_tspd(truck_cost_mtx, drone_cost_mtx)
 
-@show result1[1].total_cost
+@show result1.best_total_cost
 @show result2.total_cost
 ```
 

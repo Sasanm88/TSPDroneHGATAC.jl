@@ -19,6 +19,29 @@ mutable struct TSPD_Route
     run_time::Float64
 end
 
+mutable struct HybridGeneticAlgorithmResult
+    best_total_cost::Float64
+    best_truck_route::Vector{Int}
+    best_drone_route::Vector{Int}
+    routes::Vector{TSPD_Route}
+end
+
+
+function prepare_return_value(routes::Vector{TSPD_Route})
+    best_index = argmin([routes[i].total_cost for i in 1:length(routes)])
+    result = HybridGeneticAlgorithmResult(
+        routes[best_index].total_cost,
+        routes[best_index].Truck_Route,
+        routes[best_index].Drone_Route,
+        routes
+    )
+    return result
+end
+
+
+
+
+
 function Is_feasibleM(c::Vector{Int64})
     prev_negative = false
     @inbounds for i = 1:length(c)
