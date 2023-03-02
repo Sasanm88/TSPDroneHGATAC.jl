@@ -325,7 +325,7 @@ end
 
 
 function run_GA(problem_type::ProblemType, num_runs::Int64, T::Matrix{Float64}, D::Matrix{Float64},
-    flying_range::Float64, sR::Float64, sL::Float64, drone_not_Eligible::Vector{Int})
+    flying_range::Float64, sR::Float64, sL::Float64, drone_ineligible_nodes::Vector{Int})
 
     n_nodes = size(T)[1] - 2
     if flying_range >= maximum(sum(sort(D, dims=2, rev=true)[:, 1:2], dims=2))
@@ -344,7 +344,7 @@ function run_GA(problem_type::ProblemType, num_runs::Int64, T::Matrix{Float64}, 
         initial_chrm = Build_Initial_chromosome(T, D, n_nodes, flying_range, sR, sL)
         t1 = time()
         println("Run ", i, ":")
-        P = Perform_Genetic_Algorithm(T, D, drone_not_Eligible, h, popsize, k_tournament, targetFeasible, sR, sL,
+        P = Perform_Genetic_Algorithm(T, D, drone_ineligible_nodes, h, popsize, k_tournament, targetFeasible, sR, sL,
             num_generations, flying_range, initial_chrm, problem_type)
         t2 = time()
         Route = Return_best_route(P)

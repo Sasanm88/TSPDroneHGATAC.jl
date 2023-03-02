@@ -39,7 +39,19 @@ function prepare_return_value(routes::Vector{TSPD_Route})
 end
 
 
+function cost_matrices_with_dummy(truck_cost_mtx, drone_cost_mtx)
+    Ct = [
+        truck_cost_mtx          truck_cost_mtx[:, 1];
+        truck_cost_mtx[1, :]'    0.0
+    ]
 
+    Cd = [
+        drone_cost_mtx          drone_cost_mtx[:, 1];
+        drone_cost_mtx[1, :]'    0.0
+    ]
+
+    return Ct, Cd
+end
 
 
 function Is_feasibleM(c::Vector{Int64})
