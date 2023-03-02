@@ -217,7 +217,7 @@ function solve_tspd_by_HGA_TAC(
     sL::Float64=0.0
 )
 
-    T, D = Calculate_duration_matrices(tspeed, dspeed, depot, Customers, problem_type)
+    T, D = calculate_duration_matrices(tspeed, dspeed, depot, Customers, problem_type)
 
     return run_GA(problem_type, num_runs, T, D, flying_range, sR, sL, drone_ineligible_nodes)
 end

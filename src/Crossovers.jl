@@ -1,5 +1,5 @@
 
-function Crossover_DX1(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::Int64)
+function crossover_DX1(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::Int64)
     child = zeros(Int64, n_nodes)
     idx1 = rand(1:n_nodes)
     idx2 = rand(1:n_nodes)
@@ -19,7 +19,7 @@ function Crossover_DX1(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::
     return child
 end
 
-function Crossover_DX2(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::Int64)   #drone crossover
+function crossover_DX2(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::Int64)   #drone crossover
     child = zeros(Int64, n_nodes)
     p1_idx = Vector{Int64}()
     if rand() < 0.5
@@ -59,7 +59,7 @@ function Crossover_DX2(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::
     return child
 end
 
-function Crossover_DX3(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::Int64)
+function crossover_DX3(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::Int64)
     signs1 = zeros(Int, n_nodes)
     signs2 = zeros(Int, n_nodes)
     @inbounds for node in parent1
@@ -113,7 +113,7 @@ function Crossover_DX3(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::
 end
 
 
-function Crossover_OX1(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::Int64)   #order crossover
+function crossover_OX1(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::Int64)   #order crossover
     child = zeros(Int64, n_nodes)
     idx1 = rand(2:n_nodes-1)
     idx2 = rand(2:n_nodes-1)
@@ -142,7 +142,7 @@ function Crossover_OX1(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::
     return child
 end
 
-function Crossover_OX2(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::Int64)   #Order-based crossover
+function crossover_OX2(parent1::Vector{Int64}, parent2::Vector{Int64}, n_nodes::Int64)   #Order-based crossover
     child = zeros(Int64, n_nodes)
     num_pos = rand(1:n_nodes)
     selected_pos2 = sample(1:n_nodes, Weights(ones(n_nodes)), num_pos, replace=false)

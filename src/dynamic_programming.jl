@@ -1,10 +1,10 @@
-mutable struct drone_LL
+mutable struct DroneLL
     node::Int64
-    luanch::Int64
-    Land::Int64
+    launch::Int64
+    land::Int64
 end
 
-mutable struct Tr_node
+mutable struct TruckNode
     tnode::Int64
     dnode::Int64
     before_drone::Vector{Int64}
@@ -12,6 +12,16 @@ mutable struct Tr_node
     f_value::Float64
     prev_action::Int64   #negative means drone flew from there to here visiting dnode, positive means truck moved
 end
+
+mutable struct TruckNodeInf
+    tnode::Int64
+    dnode::Vector{Int64}
+    before_drone::Vector{Int64}
+    after_drone::Vector{Int64}
+    f_value::Float64
+    prev_action::Int64   #negative means drone flew from there to here visiting dnode, positive means truck moved
+end
+
 
 function find_tnodes(c::Vector{Int64}, n_nodes::Int64)
     tnodes = Vector{Int64}()
@@ -70,9 +80,9 @@ function find_fitness_F_FSTSP(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{
         inv_tnodes[tnodes[i]] = i
     end
 
-    M = Vector{Tr_node}()
+    M = Vector{TruckNode}()
     @inbounds for i = 1:num_t_nodes
-        push!(M, Tr_node(tnodes[i], 0, Vector{Int64}(), Vector{Int64}(), Inf, 0))
+        push!(M, TruckNode(tnodes[i], 0, Vector{Int64}(), Vector{Int64}(), Inf, 0))
     end
     M[num_t_nodes].f_value = 0
     tnode_loc = n_nodes + 1
@@ -192,9 +202,9 @@ function find_fitness_infR_FSTSP(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matr
         inv_tnodes[tnodes[i]] = i
     end
 
-    M = Vector{Tr_node}()
+    M = Vector{TruckNode}()
     @inbounds for i = 1:num_t_nodes
-        push!(M, Tr_node(tnodes[i], 0, Vector{Int64}(), Vector{Int64}(), Inf, 0))
+        push!(M, TruckNode(tnodes[i], 0, Vector{Int64}(), Vector{Int64}(), Inf, 0))
     end
     M[num_t_nodes].f_value = 0
     tnode_loc = n_nodes + 1
@@ -299,14 +309,7 @@ function find_fitness_infR_FSTSP(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matr
     return M[1].f_value, LLnodesLoc, Real_LLnodesloc
 end
 
-mutable struct Tr_node_inf
-    tnode::Int64
-    dnode::Vector{Int64}
-    before_drone::Vector{Int64}
-    after_drone::Vector{Int64}
-    f_value::Float64
-    prev_action::Int64   #negative means drone flew from there to here visiting dnode, positive means truck moved
-end
+
 
 function find_tdnodes(c::Vector{Int64}, n_nodes::Int64)
     tnodes = Vector{Int64}()
@@ -357,9 +360,9 @@ function find_fitness_infM_FSTSP(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matr
         inv_tnodes[tnodes[i]] = i
     end
 
-    M = Vector{Tr_node_inf}()
+    M = Vector{TruckNodeInf}()
     @inbounds for i = 1:num_t_nodes
-        push!(M, Tr_node_inf(tnodes[i], Vector{Int64}(), Vector{Int64}(), Vector{Int64}(), Inf, 0))
+        push!(M, TruckNodeInf(tnodes[i], Vector{Int64}(), Vector{Int64}(), Vector{Int64}(), Inf, 0))
     end
     M[num_t_nodes].f_value = 0
     tnode_loc = n_nodes + 1
@@ -477,9 +480,9 @@ function find_fitness_F_TSPD(cc::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{
         inv_tnodes[tnodes[i]] = i
     end
 
-    M = Vector{Tr_node}()
+    M = Vector{TruckNode}()
     for i = 1:num_t_nodes
-        push!(M, Tr_node(tnodes[i], 0, Int[], Int[], Inf, 0))
+        push!(M, TruckNode(tnodes[i], 0, Int[], Int[], Inf, 0))
     end
     M[1].f_value = 0
 
@@ -576,9 +579,9 @@ function find_fitness_infR_TSPD(cc::Vector{Int64}, TT::Matrix{Float64}, DD::Matr
         inv_tnodes[tnodes[i]] = i
     end
 
-    M = Vector{Tr_node}()
+    M = Vector{TruckNode}()
     for i = 1:num_t_nodes
-        push!(M, Tr_node(tnodes[i], 0, [], [], Inf, 0))
+        push!(M, TruckNode(tnodes[i], 0, [], [], Inf, 0))
     end
     M[1].f_value = 0
 
@@ -673,9 +676,9 @@ function find_fitness_infM_TSPD(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matri
         inv_tnodes[tnodes[i]] = i
     end
 
-    M = Vector{Tr_node_inf}()
+    M = Vector{TruckNodeInf}()
     for i = 1:num_t_nodes
-        push!(M, Tr_node_inf(tnodes[i], [], [], [], Inf, 0))
+        push!(M, TruckNodeInf(tnodes[i], [], [], [], Inf, 0))
     end
     M[1].f_value = 0
     d_counter = 1
@@ -772,9 +775,9 @@ function DP_test(c::Vector{Int64}, TT::Matrix{Float64}, DD::Matrix{Float64}, fly
         inv_tnodes[tnodes[i]] = i
     end
 
-    M = Vector{Tr_node}()
+    M = Vector{TruckNode}()
     @inbounds for i = 1:num_t_nodes
-        push!(M, Tr_node(tnodes[i], 0, Vector{Int64}(), Vector{Int64}(), Inf, 0))
+        push!(M, TruckNode(tnodes[i], 0, Vector{Int64}(), Vector{Int64}(), Inf, 0))
     end
     M[num_t_nodes].f_value = 0
     tnode_loc = n_nodes + 1

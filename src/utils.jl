@@ -54,7 +54,7 @@ function cost_matrices_with_dummy(truck_cost_mtx, drone_cost_mtx)
 end
 
 
-function Is_feasibleM(c::Vector{Int64})
+function is_feasibleM(c::Vector{Int64})
     prev_negative = false
     @inbounds for i = 1:length(c)
         if c[i] < 0
@@ -183,7 +183,7 @@ function find_beforeANDafter_nodes(c::Vector{Int64}, TT::Matrix{Float64}, proble
     return DrNodes
 end
 
-function Is_feasibleR(c::Vector{Int64}, DD::Matrix{Float64}, TT::Matrix{Float64}, dEligible::Vector{Int64},
+function is_feasibleR(c::Vector{Int64}, DD::Matrix{Float64}, TT::Matrix{Float64}, dEligible::Vector{Int64},
      flying_range::Float64, sR::Float64, sL::Float64, problem_type::ProblemType)   #Not required for unlimited TSPD
     
     violating_nodes = Vector{Int64}()
@@ -256,7 +256,7 @@ function best_objective(Population::Vector{Chromosome})
     return Inf # Is this correct?
 end
 
-function Print_best_route(Population::Vector{Chromosome})
+function print_best_route(Population::Vector{Chromosome})
     @inbounds for i in 1:length(Population)
         if Population[i].feasible == 'F'
             @inbounds for j in Population[i].genes
@@ -267,7 +267,7 @@ function Print_best_route(Population::Vector{Chromosome})
     end
 end
 
-function Return_best_route(Population::Vector{Chromosome})
+function return_best_route(Population::Vector{Chromosome})
     Best_Route = TSPD_Route([0], Int[], 0.0, 0.0)
     chrm = Population[1]
     n = length(chrm.genes)
@@ -312,7 +312,7 @@ function Return_best_route(Population::Vector{Chromosome})
     return Best_Route
 end
 
-function Find_Closeness(TT::Matrix{Float64}, DD::Matrix{Float64}, h::Float64)
+function find_closeness(TT::Matrix{Float64}, DD::Matrix{Float64}, h::Float64)
     n_nodes = size(TT)[1] - 2
     num = Int(ceil(h * n_nodes))
     ClosenessT = zeros(Int, n_nodes, num)
