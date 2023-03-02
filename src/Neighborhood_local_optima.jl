@@ -904,7 +904,7 @@ function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matr
         r = rand(1:length(methods))
         # c = @code_warntype NLO24(chrmF, ClosenessT, ClosenessD)
         c = methods[r](chrmF, ClosenessT, ClosenessD)
-        violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
+        violating_drones = is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
         if length(violating_drones) == 0
             f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
             if f < best_fF
@@ -971,7 +971,7 @@ function Scape_local_optima(P::Vector{Chromosome}, TT::Matrix{Float64}, DD::Matr
             r = 0
             r = rand(1:length(methods))
             c = methods[r](chrmR, ClosenessT, ClosenessD)
-            violating_drones = Is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
+            violating_drones = is_feasibleR(c, DD, TT, dEligible, flying_range, sR, sL, problem_type)
             if length(violating_drones) == 0
                 f, llc, rllc = find_fitness(c, TT, DD, flying_range, sR, sL, penaltyR, penaltyM, 'F', problem_type)
                 if f < best_fF

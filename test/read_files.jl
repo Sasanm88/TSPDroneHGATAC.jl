@@ -104,7 +104,7 @@ function read_Murray(file_name::String)
             end
         end
     end
-    filename = joinpath(curdir, "Test_instances/FSTSP-Instances-Murray/FSTSP_10_customer_problems/$(file_name)/nodes.csv")
+    filename = joinpath(@__DIR__, "Test_instances/FSTSP-Instances-Murray/FSTSP_10_customer_problems/$(file_name)/nodes.csv")
     d = readdlm(filename, header=false, ',')
     dEligible = Int[]
     for i = 0:10
