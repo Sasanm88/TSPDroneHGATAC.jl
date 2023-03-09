@@ -65,8 +65,8 @@ end
 function solve_tspd(
     x::Vector{Float64},
     y::Vector{Float64};
-    truck_cost_factor::Float64=1.0,
-    drone_cost_factor::Float64=0.5,
+    truck_speed::Float64=1.0,
+    drone_speed::Float64=2.0,
     num_runs::Int64=1,
     flying_range::Float64=Inf
 )
@@ -81,8 +81,8 @@ function solve_tspd(
         num_runs,
         depot,
         customers,
-        1 / truck_cost_factor,
-        1 / drone_cost_factor,
+        truck_speed,
+        drone_speed,
         flying_range=flying_range
     )
 

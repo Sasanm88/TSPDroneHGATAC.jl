@@ -41,7 +41,7 @@ To install `TSPDrone.jl`:
 
 Using `x`-`y` coordinates. 
 Based on the coordinates, the Euclidean distances are calculated. 
-`truck_cost_factor` and `drone_cost_factor` will be multiplied to the Eucidean distances to calculate the travel cost for the truck and the drone, respectively.
+The Eucliden distances will be divided by `truck_speed` and `drone_speed` to calculate the travel cost for the truck and the drone, respectively.
 
 
 ```julia
@@ -49,7 +49,7 @@ using TSPDroneHGATAC
 n = 10 
 x = rand(n); y = rand(n);
 
-result1 = TSPDroneHGATAC.solve_tspd(x, y, truck_cost_factor=1.0, drone_cost_factor=0.5)
+result1 = TSPDroneHGATAC.solve_tspd(x, y, truck_speed=1.0, drone_speed=2.0)
 
 # compare with TSPDrone.jl
 using TSPDrone
