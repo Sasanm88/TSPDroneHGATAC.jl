@@ -1,7 +1,23 @@
 # TSPDroneHGATAC.jl
 
 
-A package that uses Hybrid Genetic Algorithm to solve any TSPD or FSTSP instance
+A package that uses Hybrid Genetic Algorithm to solve any TSPD or FSTSP instance, based on the following paper:
+
+
+https://arxiv.org/abs/2303.00614
+
+```
+@misc{mahmoudinazlou_hybrid,
+  author = {Mahmoudinazlou, Sasan and Kwon, Changhyun},
+  title = {A Hybrid Genetic Algorithm with Type-Aware Chromosomes for Traveling Salesman Problems with Drone},
+  year = {2023},
+  doi = {10.48550/ARXIV.2303.00614},  
+  url = {https://arxiv.org/abs/2303.00614},
+}
+```
+
+
+
 
 # Installation
 
