@@ -5,13 +5,13 @@ using Shuffle
 
 include("utils.jl")
 include("create_samples.jl")
-include("crossovers.jl")
-include("mutations.jl")
+include("Crossovers.jl")
+include("Mutations.jl")
 include("dynamic_programming.jl")
 include("genetic_algorithm.jl")
-include("initial.jl")
-include("neighborhood.jl")
-include("neighborhood_local_optima.jl")
+include("Initial.jl")
+include("Neighborhood.jl")
+include("Neighborhood_local_optima.jl")
 include("internals.jl")
 
 
