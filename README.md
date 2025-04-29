@@ -113,3 +113,12 @@ result1 = TSPDroneHGATAC.solve_fstsp(truck_cost_mtx, drone_cost_mtx; flying_rang
 
 @show result1.best_total_cost
 ```
+
+
+## Related Packages
+
+- [TSPDroneLIB](https://github.com/chkwon/TSPDroneLIB)
+- [TSPDrone.jl](https://github.com/chkwon/TSPDrone.jl)
+- [TSPDroneHGATAC.jl](https://github.com/Sasanm88/TSPDroneHGATAC.jl)
+- [TSPDroneICP.jl](https://github.com/0505daniel/TSPDroneICP.jl)
+
